@@ -6,9 +6,12 @@ namespace PokemonSaves
 {
     public class TrainerInfo : IBinaryParsable
     {
-        public long PlayerName;
-        public byte PlayerGender;
-        public TrainerId TrainerID;
+        private long _playerName;
+        private byte _playerGender;
+        private TrainerId _trainerID;
+        public long PlayerName { get => _playerName; set => _playerName = value; }
+        public byte PlayerGender { get => _playerGender; set => _playerGender = value; }
+        public TrainerId TrainerID { get => _trainerID; set => _trainerID = value; }
         public enum Offsets : long
         {
             PlayerName = 0x0000,
@@ -37,22 +40,25 @@ namespace PokemonSaves
 
     public class TrainerId : IBinaryParsable
     {
-        public ushort PublicId;
-        public ushort SecretId;
+
+        private ushort _publicID;
+        private ushort _secretID;
+        public ushort PublicID { get => _publicID; set => _publicID = value; }
+        public ushort SecretID { get => _secretID; set => _secretID = value; }
 
         public enum Offsets : long
         {
-            PublicId = 0x0000,
-            SecretId = 0x0002
+            PublicID = 0x0000,
+            SecretID = 0x0002
         }
 
         public void Read(BinaryReader binaryReader)
         {
             long startOffset = binaryReader.BaseStream.Position;
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.PublicId, SeekOrigin.Begin);
-            PublicId = binaryReader.ReadUInt16();
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.SecretId, SeekOrigin.Begin);
-            SecretId = binaryReader.ReadUInt16();
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.PublicID, SeekOrigin.Begin);
+            PublicID = binaryReader.ReadUInt16();
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.SecretID, SeekOrigin.Begin);
+            SecretID = binaryReader.ReadUInt16();
         }
     }
 }
