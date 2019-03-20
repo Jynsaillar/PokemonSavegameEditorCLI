@@ -9,6 +9,8 @@ namespace PokemonSaves
 
         public GameSave()
         {
+            // There are always 14 sections in total but their order does not matter,
+            // thus a HashSet fits perfectly here.
             _saveDataSections = new HashSet<SaveDataSection>(14);
         }
 
