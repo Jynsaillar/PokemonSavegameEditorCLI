@@ -12,13 +12,15 @@ namespace PokemonSaves
         public long PlayerName { get => _playerName; set => _playerName = value; }
         public byte PlayerGender { get => _playerGender; set => _playerGender = value; }
         public TrainerId TrainerID { get => _trainerID; set => _trainerID = value; }
+        // TODO: Add missing fields & corresponding properties for TimePlayed, Options, GameCode, SecurityKey
         public enum Offsets : long
         {
             PlayerName = 0x0000,
             PlayerGender = 0x0008,
             TrainerID = 0x000A,
             TimePlayed = 0x000E,
-            Options = 0x00AC,
+            Options = 0x0013,
+            GameCode = 0x00AC,
             SecurityKey = 0x0AF8
         }
 
