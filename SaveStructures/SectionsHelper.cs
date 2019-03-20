@@ -35,7 +35,8 @@ namespace PokemonSaves
             return 3968;
         }
 
-        /// <summary> Returns the size of a section from its section ID. </summary>
+        /// <summary> Returns the size of a section in bytes from its section ID. 
+        /// The section sizes are fixed. </summary>
         public static uint GetSectionSize(uint sectionIndex)
         {
             foreach (var sectionType in SectionTypes)
