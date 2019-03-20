@@ -6,9 +6,9 @@ namespace PokemonSaves
         GameSave _gameSaveB;
         public GameSave GameSaveA { get => _gameSaveA; set => _gameSaveA = value; }
         public GameSave GameSaveB { get => _gameSaveB; set => _gameSaveB = value; }
-        /// todo: HallOfFame
-        /// todo: MysteryGiftEReader
-        /// todo: RecordedBattle
+        /// TODO: HallOfFame
+        /// TODO: MysteryGiftEReader
+        /// TODO: RecordedBattle
 
         public enum Offsets : long
         {
