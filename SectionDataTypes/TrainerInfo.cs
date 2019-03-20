@@ -24,20 +24,23 @@ namespace PokemonSaves
             SecurityKey = 0x0AF8
         }
 
-        public void Read(BinaryReader binaryReader)
+        public void ReadFromBinary(BinaryReader binaryReader)
         {
             long startOffset = binaryReader.BaseStream.Position;
+            // PlayerName
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.PlayerName, SeekOrigin.Begin);
             PlayerName = binaryReader.ReadInt64();
+            // PlayerGender
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.PlayerGender, SeekOrigin.Begin);
             PlayerGender = binaryReader.ReadByte();
 
+            // TrainerID
             if (null == TrainerID)
             {
                 TrainerID = new TrainerId();
             }
 
-            TrainerID.Read(binaryReader);
+            TrainerID.ReadFromBinary(binaryReader);
 
         }
 
