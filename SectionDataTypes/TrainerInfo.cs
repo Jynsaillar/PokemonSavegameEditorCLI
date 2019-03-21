@@ -10,11 +10,13 @@ namespace PokemonSaves
         private byte _playerGender;
         private TrainerId _trainerID;
         private TimePlayed _timePlayed;
+        private Options _options;
         public long PlayerName { get => _playerName; set => _playerName = value; }
         public byte PlayerGender { get => _playerGender; set => _playerGender = value; }
         public TrainerId TrainerID { get => _trainerID; set => _trainerID = value; }
         public TimePlayed TimePlayed { get => _timePlayed; set => _timePlayed = value; }
-        // TODO: Add missing fields & corresponding properties for Options, GameCode, SecurityKey
+        public Options Options { get => _options; set => _options = value; }
+        // TODO: Add missing fields & corresponding properties for GameCode, SecurityKey
         public enum Offsets : long
         {
             PlayerName = 0x0000,
@@ -49,6 +51,13 @@ namespace PokemonSaves
                 TimePlayed = new TimePlayed();
             }
             TimePlayed.ReadFromBinary(binaryReader);
+
+            // Options
+            if (null == Options)
+            {
+                Options = new Options();
+            }
+            Options.ReadFromBinary(binaryReader);
         }
 
     }
