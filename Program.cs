@@ -19,10 +19,13 @@ namespace PokemonSavegameEditor
             string filePath = args[0];
             if (!File.Exists(filePath))
             {
-                Console.WriteLine($@"The file at path\n{filePath}\ndoes not exist!\n
-                                    If the path contains spaces, surround it with brackets like this:\n
-                                    ""C:\My folder with spaces in it\firered.sav""
-                                    ");
+                Console.WriteLine($@"
+                The file at path
+                {filePath}
+                does not exist!
+                If the path contains spaces, surround it with double quotes like this:
+                ""C:\My folder with spaces in it\firered.sav""
+                ");
             }
 
             var saveGame = new FireredLeafgreenSave();
@@ -30,9 +33,9 @@ namespace PokemonSavegameEditor
             using (var stream = File.OpenRead(filePath))
             using (var binaryReader = new BinaryReader(stream))
             {
-                // todo: save file parsing here
+                // TODO: Parse save file here
             }
-
+            
             Console.WriteLine($"Loaded save {saveGame.GameName}, GEN: {saveGame.Generation}");
 
             Console.WriteLine("Bye World!");
