@@ -12,6 +12,12 @@ namespace PokemonSaves
         /// TODO: MysteryGiftEReader
         /// TODO: RecordedBattle
 
+        public SaveFile()
+        {
+            GameSaveA = new GameSave();
+            GameSaveB = new GameSave();
+        }
+
         public enum Offsets : long
         {
             GameSaveA = 0x000000,
@@ -26,7 +32,7 @@ namespace PokemonSaves
             uint LastSaveIndexA = GameSaveA.GetLastSaveIndex();
             uint LastSaveIndexB = GameSaveB.GetLastSaveIndex();
 
-            if (LastSaveIndexA > LastSaveIndexB)
+            if (LastSaveIndexA > LastSaveIndexB || (LastSaveIndexA == 0 && LastSaveIndexB == 0))
             {
                 return GameSaveA;
             }
@@ -37,10 +43,11 @@ namespace PokemonSaves
         public void ReadFromBinary(BinaryReader binaryReader)
         {
             long startOffset = binaryReader.BaseStream.Position;
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.GameSaveA, SeekOrigin.Begin);
             // GameSave A
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.GameSaveA, SeekOrigin.Begin);
             GameSaveA.ReadFromBinary(binaryReader);
             //GameSave B
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.GameSaveB, SeekOrigin.Begin);
             GameSaveB.ReadFromBinary(binaryReader);
 
         }
