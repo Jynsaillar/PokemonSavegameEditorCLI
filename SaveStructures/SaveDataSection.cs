@@ -33,24 +33,28 @@ namespace PokemonSaves
             // SaveIndex
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.SaveIndex, SeekOrigin.Begin);
             SaveIndex = binaryReader.ReadUInt32();
+            // Data
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Data, SeekOrigin.Begin); // Seeks start offset of SectionData.
 
             // Parsing of actual SectionData starts here since the SectionID is needed to determine the derived
             // type of SectionData (e.g. TrainerInfo, GameState, RivalInfo etc.).
             switch (SectionID)
             {
                 case DataSectionTypes.TrainerInfo:
-                    binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Data, SeekOrigin.Begin); // Seeks start offset of SectionData.
                     var trainerInfo = new TrainerInfo();
                     trainerInfo.ReadFromBinary(binaryReader); // Parses SectionData as TrainerInfo since the SectionID matches TrainerInfo.
                     Data = trainerInfo; // Box TrainerInfo into SectionData type.
-                    /* Since reading the SectionData block's actual data section is finished but the stream is not at the end offset
+                    break;
+                // TODO: Implement cases for remaining DataSectionTypes.
+                default:
+                    Data = new SectionData();
+                    break;
+            }
+
+            /* Since reading the SectionData block's actual data section is finished but the stream is not at the end offset
                        of the total SectionData block, the stream position needs to be updated before proceeding/exiting the function
                        to prevent breaking future read operations. */
-                    uint sectionSize = SectionsHelper.GetSectionSize(SectionID);
-                    binaryReader.BaseStream.Seek(startOffset + sectionSize, SeekOrigin.Begin);
-                    break;
-                    // TODO: Implement cases for remaining DataSectionTypes.
-            }
+            binaryReader.BaseStream.Seek(startOffset + 4096, SeekOrigin.Begin);
         }
     }
 
