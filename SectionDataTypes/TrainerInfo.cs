@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace PokemonSaves
 {
-    public class TrainerInfo : IBinaryParsable
+    public class TrainerInfo : SectionData, IBinaryParsable
     {
         private long _playerName;
         private byte _playerGender;
