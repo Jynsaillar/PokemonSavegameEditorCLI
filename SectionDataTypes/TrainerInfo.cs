@@ -57,6 +57,7 @@ namespace PokemonSaves
             {
                 TrainerID = new TrainerId();
             }
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.TrainerID, SeekOrigin.Begin);
             TrainerID.ReadFromBinary(binaryReader);
 
             // TimePlayed
@@ -64,6 +65,7 @@ namespace PokemonSaves
             {
                 TimePlayed = new TimePlayed();
             }
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.TimePlayed, SeekOrigin.Begin);
             TimePlayed.ReadFromBinary(binaryReader);
 
             // Options
@@ -71,6 +73,7 @@ namespace PokemonSaves
             {
                 Options = new Options();
             }
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Options, SeekOrigin.Begin);
             Options.ReadFromBinary(binaryReader);
             // GameCode
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.GameCode, SeekOrigin.Begin);
