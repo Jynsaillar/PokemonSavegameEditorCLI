@@ -12,7 +12,7 @@ namespace PokemonSaves
         {
             // There are always 14 sections in total but their order does not matter,
             // thus a HashSet fits perfectly here.
-            _saveDataSections = new HashSet<SaveDataSection>(14);
+            SaveDataSections = new HashSet<SaveDataSection>(14);
         }
 
         public uint GetLastSaveIndex()
@@ -27,11 +27,26 @@ namespace PokemonSaves
             return 0;
         }
 
-        public void ReadFromBinary(BinaryReader binaryReader)
+        public TrainerInfo GetTrainerInfo()
         {
             foreach (var saveDataSection in SaveDataSections)
             {
+                if (saveDataSection.SectionID == DataSectionTypes.TrainerInfo)
+                {
+                    return (TrainerInfo)saveDataSection.Data;
+                }
+            }
+            return null;
+        }
+
+        public void ReadFromBinary(BinaryReader binaryReader)
+        {
+            // 14 SaveDataSections in total.
+            for (int i = 0; i < 14; i++)
+            {
+                var saveDataSection = new SaveDataSection();
                 saveDataSection.ReadFromBinary(binaryReader);
+                SaveDataSections.Add(saveDataSection);
             }
         }
     }
