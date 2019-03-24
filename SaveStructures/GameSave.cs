@@ -1,8 +1,9 @@
+using System.IO;
 using System.Collections.Generic;
 
 namespace PokemonSaves
 {
-    public class GameSave : IGameSave
+    public class GameSave : IGameSave, IBinaryParsable
     {
         HashSet<SaveDataSection> _saveDataSections;
         public HashSet<SaveDataSection> SaveDataSections { get => _saveDataSections; set => _saveDataSections = value; }
@@ -24,6 +25,14 @@ namespace PokemonSaves
             }
 
             return 0;
+        }
+
+        public void ReadFromBinary(BinaryReader binaryReader)
+        {
+            foreach (var saveDataSection in SaveDataSections)
+            {
+                saveDataSection.ReadFromBinary(binaryReader);
+            }
         }
     }
 
