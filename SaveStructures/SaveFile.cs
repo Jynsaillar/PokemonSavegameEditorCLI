@@ -1,6 +1,8 @@
+using System.IO;
+
 namespace PokemonSaves
 {
-    public class SaveFile : ISaveFile
+    public class SaveFile : ISaveFile, IBinaryParsable
     {
         GameSave _gameSaveA;
         GameSave _gameSaveB;
@@ -30,6 +32,17 @@ namespace PokemonSaves
             }
 
             return GameSaveB;
+        }
+
+        public void ReadFromBinary(BinaryReader binaryReader)
+        {
+            long startOffset = binaryReader.BaseStream.Position;
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.GameSaveA, SeekOrigin.Begin);
+            // GameSave A
+            GameSaveA.ReadFromBinary(binaryReader);
+            //GameSave B
+            GameSaveB.ReadFromBinary(binaryReader);
+
         }
     }
 
