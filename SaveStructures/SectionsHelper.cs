@@ -43,7 +43,7 @@ namespace PokemonSaves
             {
                 if (sectionType.Index == sectionIndex)
                 {
-                    return sectionType.Index;
+                    return sectionType.Size;
                 }
 
             }
