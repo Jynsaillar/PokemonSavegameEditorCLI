@@ -45,7 +45,45 @@ namespace PokemonSaves
                     trainerInfo.ReadFromBinary(binaryReader); // Parses SectionData as TrainerInfo since the SectionID matches TrainerInfo.
                     Data = trainerInfo; // Box TrainerInfo into SectionData type.
                     break;
-                // TODO: Implement cases for remaining DataSectionTypes.
+                case DataSectionTypes.TeamAndItems:
+                    // TODO: Implement case TeamAndItems.
+                    break;
+                case DataSectionTypes.GameState:
+                    // TODO: Implement case GameState.
+                    break;
+                case DataSectionTypes.MiscData:
+                    // TODO: Implement case MiscData.
+                    break;
+                case DataSectionTypes.RivalInfo:
+                    // TODO: Implement case RivalInfo.
+                    break;
+                case DataSectionTypes.PCBufferA:
+                    // TODO: Implement case PCBufferA.
+                    break;
+                case DataSectionTypes.PCBufferB:
+                    // TODO: Implement case PCBufferB.
+                    break;
+                case DataSectionTypes.PCBufferC:
+                    // TODO: Implement case PCBufferC.
+                    break;
+                case DataSectionTypes.PCBufferD:
+                    // TODO: Implement case PCBufferD.
+                    break;
+                case DataSectionTypes.PCBufferE:
+                    // TODO: Implement case PCBufferE.
+                    break;
+                case DataSectionTypes.PCBufferF:
+                    // TODO: Implement case PCBufferF.
+                    break;
+                case DataSectionTypes.PCBufferG:
+                    // TODO: Implement case PCBufferG.
+                    break;
+                case DataSectionTypes.PCBufferH:
+                    // TODO: Implement case PCBufferH.
+                    break;
+                case DataSectionTypes.PCBufferI:
+                    // TODO: Implement case PCBufferI.
+                    break;
                 default:
                     Data = new SectionData();
                     break;
@@ -53,7 +91,7 @@ namespace PokemonSaves
 
             /* Since reading the SectionData block's actual data section is finished but the stream is not at the end offset
                        of the total SectionData block, the stream position needs to be updated before proceeding/exiting the function
-                       to prevent breaking future read operations. */
+                       to prevent breaking future read operations. Each section is 4096 bytes in size. */
             binaryReader.BaseStream.Seek(startOffset + 4096, SeekOrigin.Begin);
         }
     }
