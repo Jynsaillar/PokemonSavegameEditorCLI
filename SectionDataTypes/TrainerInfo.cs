@@ -42,45 +42,72 @@ namespace PokemonSaves
             SecurityKey = 0x0AF8
         }
 
-        public void ReadFromBinary(BinaryReader binaryReader)
+        protected void ReadPlayerName(BinaryReader binaryReader, long startOffset)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            // PlayerName
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.PlayerName, SeekOrigin.Begin);
             PlayerName = binaryReader.ReadInt64();
-            // PlayerGender
+        }
+
+        protected void ReadPlayerGender(BinaryReader binaryReader, long startOffset)
+        {
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.PlayerGender, SeekOrigin.Begin);
             PlayerGender = binaryReader.ReadByte();
+        }
 
-            // TrainerID
+        protected void ReadTrainerId(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
             if (null == TrainerID)
             {
                 TrainerID = new TrainerId();
             }
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.TrainerID, SeekOrigin.Begin);
-            TrainerID.ReadFromBinary(binaryReader);
+            TrainerID.ReadFromBinary(binaryReader, gameID);
+        }
 
-            // TimePlayed
+        protected void ReadTimePlayed(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
             if (null == TimePlayed)
             {
                 TimePlayed = new TimePlayed();
             }
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.TimePlayed, SeekOrigin.Begin);
-            TimePlayed.ReadFromBinary(binaryReader);
+            TimePlayed.ReadFromBinary(binaryReader, gameID);
+        }
 
-            // Options
+        protected void ReadOptions(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
             if (null == Options)
             {
                 Options = new Options();
             }
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Options, SeekOrigin.Begin);
-            Options.ReadFromBinary(binaryReader);
+            Options.ReadFromBinary(binaryReader, gameID);
+        }
+
+        protected void ReadGameCode(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
             // GameCode
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.GameCode, SeekOrigin.Begin);
             GameCode = binaryReader.ReadUInt32();
+        }
+
+        protected void ReadSecurityKey(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
             // SecurityKey
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.SecurityKey, SeekOrigin.Begin);
             SecurityKey = binaryReader.ReadUInt32();
+        }
+
+        public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
+        {
+            long startOffset = binaryReader.BaseStream.Position;
+            ReadPlayerName(binaryReader, startOffset); // PlayerName
+            ReadPlayerGender(binaryReader, startOffset); // PlayerGender
+            ReadTrainerId(binaryReader, startOffset, gameID); // TrainerID
+            ReadTimePlayed(binaryReader, startOffset, gameID); // TimePlayed
+            ReadOptions(binaryReader, startOffset, gameID); // Options
+            ReadGameCode(binaryReader, startOffset, gameID); // GameCode
+            ReadSecurityKey(binaryReader, startOffset, gameID); // SecurityKey
         }
 
     }

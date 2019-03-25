@@ -21,19 +21,23 @@ namespace PokemonSaves
             SaveIndex = 0x0FFC
         }
 
-        public void ReadFromBinary(BinaryReader binaryReader)
+        protected void ReadSectionID(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            // SectionID
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.SectionID, SeekOrigin.Begin);
             SectionID = (DataSectionTypes)binaryReader.ReadUInt16();
-            // Checksum
+        }
+        protected void ReadChecksum(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Checksum, SeekOrigin.Begin);
             Checksum = binaryReader.ReadInt16();
-            // SaveIndex
+        }
+        protected void ReadSaveIndex(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.SaveIndex, SeekOrigin.Begin);
             SaveIndex = binaryReader.ReadUInt32();
-            // Data
+        }
+        protected void ReadData(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Data, SeekOrigin.Begin); // Seeks start offset of SectionData.
 
             // Parsing of actual SectionData starts here since the SectionID is needed to determine the derived
@@ -41,8 +45,25 @@ namespace PokemonSaves
             switch (SectionID)
             {
                 case DataSectionTypes.TrainerInfo:
-                    var trainerInfo = new TrainerInfo();
-                    trainerInfo.ReadFromBinary(binaryReader); // Parses SectionData as TrainerInfo since the SectionID matches TrainerInfo.
+                    TrainerInfo trainerInfo;
+                    switch (gameID)
+                    {
+                        case GameIDs.FireRedLeafGreen:
+                            trainerInfo = new TrainerInfoFRLG();
+                            break;
+                        case GameIDs.RubySapphire:
+                            // TODO: TrainerInfoRS
+                            trainerInfo = new TrainerInfoRS();
+                            break;
+                        case GameIDs.Emerald:
+                            // TODO: TrainerInfoE
+                            trainerInfo = new TrainerInfoE();
+                            break;
+                        default:
+                            trainerInfo = new TrainerInfo();
+                            break;
+                    }
+                    trainerInfo.ReadFromBinary(binaryReader, gameID); // Parses SectionData as TrainerInfo since the SectionID matches TrainerInfo.
                     Data = trainerInfo; // Box TrainerInfo into SectionData type.
                     break;
                 case DataSectionTypes.TeamAndItems:
@@ -93,6 +114,14 @@ namespace PokemonSaves
                        of the total SectionData block, the stream position needs to be updated before proceeding/exiting the function
                        to prevent breaking future read operations. Each section is 4096 bytes in size. */
             binaryReader.BaseStream.Seek(startOffset + 4096, SeekOrigin.Begin);
+        }
+        public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
+        {
+            long startOffset = binaryReader.BaseStream.Position;
+            ReadSectionID(binaryReader, startOffset, gameID);// SectionID
+            ReadChecksum(binaryReader, startOffset, gameID);// Checksum
+            ReadSaveIndex(binaryReader, startOffset, gameID);// SaveIndex
+            ReadData(binaryReader, startOffset, gameID);// Data
         }
     }
 

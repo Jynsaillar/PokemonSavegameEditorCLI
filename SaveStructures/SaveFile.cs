@@ -40,16 +40,21 @@ namespace PokemonSaves
             return GameSaveB;
         }
 
-        public void ReadFromBinary(BinaryReader binaryReader)
+        protected void ReadGameSaveA(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.GameSaveA, SeekOrigin.Begin);
+            GameSaveA.ReadFromBinary(binaryReader, gameID);
+        }
+        protected void ReadGameSaveB(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.GameSaveB, SeekOrigin.Begin);
+            GameSaveB.ReadFromBinary(binaryReader, gameID);
+        }
+        public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
             long startOffset = binaryReader.BaseStream.Position;
-            // GameSave A
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.GameSaveA, SeekOrigin.Begin);
-            GameSaveA.ReadFromBinary(binaryReader);
-            //GameSave B
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.GameSaveB, SeekOrigin.Begin);
-            GameSaveB.ReadFromBinary(binaryReader);
-
+            ReadGameSaveA(binaryReader, startOffset, gameID);// GameSave A
+            ReadGameSaveB(binaryReader, startOffset, gameID);//GameSave B
         }
     }
 

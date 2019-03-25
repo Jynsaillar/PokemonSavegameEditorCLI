@@ -39,13 +39,13 @@ namespace PokemonSaves
             return null;
         }
 
-        public void ReadFromBinary(BinaryReader binaryReader)
+        public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
             // 14 SaveDataSections in total.
             for (int i = 0; i < 14; i++)
             {
                 var saveDataSection = new SaveDataSection();
-                saveDataSection.ReadFromBinary(binaryReader);
+                saveDataSection.ReadFromBinary(binaryReader, gameID);
                 SaveDataSections.Add(saveDataSection);
             }
         }
