@@ -52,11 +52,9 @@ namespace PokemonSaves
                             trainerInfo = new TrainerInfoFRLG();
                             break;
                         case GameIDs.RubySapphire:
-                            // TODO: TrainerInfoRS
                             trainerInfo = new TrainerInfoRS();
                             break;
                         case GameIDs.Emerald:
-                            // TODO: TrainerInfoE
                             trainerInfo = new TrainerInfoE();
                             break;
                         default:
