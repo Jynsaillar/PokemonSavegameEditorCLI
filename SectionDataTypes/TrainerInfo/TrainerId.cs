@@ -17,15 +17,22 @@ namespace PokemonSaves
             SecretID = 0x0002
         }
 
+        protected void ReadPublicID(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.PublicID, SeekOrigin.Begin);
+            PublicID = binaryReader.ReadUInt16();
+        }
+        protected void ReadSecretID(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.SecretID, SeekOrigin.Begin);
+            SecretID = binaryReader.ReadUInt16();
+        }
+
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
             long startOffset = binaryReader.BaseStream.Position;
-            // PublicID
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.PublicID, SeekOrigin.Begin);
-            PublicID = binaryReader.ReadUInt16();
-            // SecretID
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.SecretID, SeekOrigin.Begin);
-            SecretID = binaryReader.ReadUInt16();
+            ReadPublicID(binaryReader, startOffset, gameID); // PublicID
+            ReadSecretID(binaryReader, startOffset, gameID); // SecretID
         }
     }
 }

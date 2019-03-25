@@ -23,23 +23,33 @@ namespace PokemonSaves
             TextSpeedFrameStyle = 0x0014,
             SoundModeBattleStyleBattleScene = 0x0015
         }
-        public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
+        protected void ReadButtonMode(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            // ButtonMode
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.ButtonMode, SeekOrigin.Begin);
             ButtonMode = (ButtonMode)binaryReader.ReadByte();
-            // TextSpeed & FrameStyle
+        }
+        protected void ReadTextSpeedFrameStyle(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.TextSpeedFrameStyle, SeekOrigin.Begin);
             byte textSpeedFrameStyleFlags = binaryReader.ReadByte();
             TextSpeed = OptionsHelper.ExtractTextSpeed(textSpeedFrameStyleFlags);
             FrameStyle = OptionsHelper.ExtractFrameStyle(textSpeedFrameStyleFlags);
-            // SoundMode, BattleStyle & BattleScene
+        }
+        protected void ReadSoundModeBattleStyleBattleScene(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.SoundModeBattleStyleBattleScene, SeekOrigin.Begin);
             byte soundModeBattleStyleBattleSceneFlags = binaryReader.ReadByte();
             SoundMode = OptionsHelper.ExtractSoundMode(soundModeBattleStyleBattleSceneFlags);
             BattleStyle = OptionsHelper.ExtractBattleStyle(soundModeBattleStyleBattleSceneFlags);
             BattleScene = OptionsHelper.ExtractBattleScene(soundModeBattleStyleBattleSceneFlags);
+        }
+
+        public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
+        {
+            long startOffset = binaryReader.BaseStream.Position;
+            ReadButtonMode(binaryReader, startOffset, gameID);// ButtonMode
+            ReadTextSpeedFrameStyle(binaryReader, startOffset, gameID);// TextSpeed & FrameStyle
+            ReadSoundModeBattleStyleBattleScene(binaryReader, startOffset, gameID);// SoundMode, BattleStyle & BattleScene
         }
     }
 }

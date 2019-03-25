@@ -24,22 +24,34 @@ namespace PokemonSaves
             Seconds = 0x0003,
             Frames = 0x0004
         }
+        protected void ReadHours(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Hours, SeekOrigin.Begin);
+            Hours = binaryReader.ReadUInt16();
+        }
+        protected void ReadMinutes(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Minutes, SeekOrigin.Begin);
+            Minutes = binaryReader.ReadByte();
+        }
+        protected void ReadSeconds(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Seconds, SeekOrigin.Begin);
+            Seconds = binaryReader.ReadByte();
+        }
+        protected void ReadFrames(BinaryReader binaryReader, long startOffset, GameIDs gameID)
+        {
+            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Frames, SeekOrigin.Begin);
+            Frames = binaryReader.ReadByte();
+        }
 
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
             long startOffset = binaryReader.BaseStream.Position;
-            // Hours
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Hours, SeekOrigin.Begin);
-            Hours = binaryReader.ReadUInt16();
-            // Minutes
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Minutes, SeekOrigin.Begin);
-            Minutes = binaryReader.ReadByte();
-            // Seconds
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Seconds, SeekOrigin.Begin);
-            Seconds = binaryReader.ReadByte();
-            // Frames
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Frames, SeekOrigin.Begin);
-            Frames = binaryReader.ReadByte();
+            ReadHours(binaryReader, startOffset, gameID);// Hours
+            ReadMinutes(binaryReader, startOffset, gameID);// Minutes
+            ReadSeconds(binaryReader, startOffset, gameID);// Seconds
+            ReadFrames(binaryReader, startOffset, gameID);// Frames
         }
     }
 }
