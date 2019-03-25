@@ -2,6 +2,6 @@ namespace PokemonSaves
 {
     interface IBinaryParsable
     {
-        void ReadFromBinary(System.IO.BinaryReader binaryReader);
+        void ReadFromBinary(System.IO.BinaryReader binaryReader, GameIDs gameID);
     }
 }
