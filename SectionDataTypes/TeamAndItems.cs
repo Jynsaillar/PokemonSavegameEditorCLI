@@ -104,7 +104,7 @@ namespace PokemonSaves
             {
                 var item = new Item();
                 item.ReadFromBinary(binaryReader, gameID);
-                PCItems.Add(item);
+                ItemPocket.Add(item);
             }
         }
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
