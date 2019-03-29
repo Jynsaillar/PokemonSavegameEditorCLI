@@ -84,7 +84,7 @@ namespace PokemonSaves
         protected void ReadLanguage(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Language, SeekOrigin.Begin);
-            OTID = binaryReader.ReadUInt16();
+            Language = binaryReader.ReadUInt16();
         }
         protected void ReadOTName(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
@@ -111,7 +111,7 @@ namespace PokemonSaves
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.PokemonData, SeekOrigin.Begin);
             if (null == PokemonData)
             {
-                PokemonData = new PokemonData();
+                PokemonData = new PokemonData(this);
             }
             PokemonData.ReadFromBinary(binaryReader, gameID);
         }
