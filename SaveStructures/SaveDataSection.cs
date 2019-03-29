@@ -65,7 +65,26 @@ namespace PokemonSaves
                     Data = trainerInfo; // Box TrainerInfo into SectionData type.
                     break;
                 case DataSectionTypes.TeamAndItems:
-                    // TODO: Implement case TeamAndItems.
+                    TeamAndItems teamAndItems;
+                    switch (gameID)
+                    {
+                        case GameIDs.FireRedLeafGreen:
+                            teamAndItems = new TeamAndItemsFRLG();
+                            break;
+                        case GameIDs.RubySapphire:
+                            teamAndItems = new TeamAndItems();
+                            // TODO: Implement case TeamAndItemsRS.
+                            break;
+                        case GameIDs.Emerald:
+                            teamAndItems = new TeamAndItems();
+                            // TODO: Implement case TeamAndItemsE.
+                            break;
+                        default:
+                            teamAndItems = new TeamAndItems();
+                            break;
+                    }
+                    teamAndItems.ReadFromBinary(binaryReader, gameID); // Parses SectionData as TeamAndItems since the SectionID matches TeamAndItems.
+                    Data = teamAndItems; // Box TeamAndItems into SectionData type.
                     break;
                 case DataSectionTypes.GameState:
                     // TODO: Implement case GameState.
