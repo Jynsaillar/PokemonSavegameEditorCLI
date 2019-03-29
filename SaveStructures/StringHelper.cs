@@ -49,5 +49,16 @@ namespace PokemonSaves
             }
             return stringBuilder.ToString();
         }
+
+        public static string GameStringToReadableString(byte[] gameString, bool international)
+        {
+            byte[] gameStringBytes = gameString;
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (byte b in gameStringBytes)
+            {
+                stringBuilder.Append(international ? CharacterMapInternational[b] : CharacterMapJapanese[b]);
+            }
+            return stringBuilder.ToString();
+        }
     }
 }
