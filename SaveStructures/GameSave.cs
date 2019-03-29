@@ -39,6 +39,30 @@ namespace PokemonSaves
             return null;
         }
 
+        public object GetTeamAndItems(GameIDs gameID)
+        {
+            foreach (var saveDataSection in SaveDataSections)
+            {
+                if (saveDataSection.SectionID == DataSectionTypes.TeamAndItems)
+                {
+                    switch (gameID)
+                    {
+                        case GameIDs.FireRedLeafGreen:
+                            return (TeamAndItemsFRLG)saveDataSection.Data;
+                        case GameIDs.RubySapphire:
+                            // TODO: TeamAndItemsRS case.
+                            break;
+                        case GameIDs.Emerald:
+                            // TODO: TeamAndItemsE case.
+                            break;
+                    }
+
+                    return (TeamAndItems)saveDataSection.Data;
+                }
+            }
+            return null;
+        }
+
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
             // 14 SaveDataSections in total.
