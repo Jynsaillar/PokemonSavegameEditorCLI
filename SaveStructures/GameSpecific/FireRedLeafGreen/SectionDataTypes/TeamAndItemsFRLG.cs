@@ -18,32 +18,5 @@ namespace PokemonSaves
             TMCase = 0x0464,
             BerryPocket = 0x054C
         }
-
-        protected void ReadTeamSize(BinaryReader binaryReader, long startOffset, GameIDs gameID)
-        {
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.TeamSize, SeekOrigin.Begin);
-            TeamSize = binaryReader.ReadUInt32();
-        }
-
-        protected void ReadTeamPokemonList(BinaryReader binaryReader, long startOffset, GameIDs gameID)
-        {
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.TeamPokemonList, SeekOrigin.Begin);
-            if (null == TeamPokemonList)
-            {
-                TeamPokemonList = new List<Pokemon>();
-            }
-            for (int i = 0; i < 6; i++)
-            {
-                Pokemon pokemon = new Pokemon();
-                pokemon.ReadFromBinary(binaryReader, gameID);
-                TeamPokemonList.Add(pokemon);
-            }
-        }
-
-        protected void ReadMoney(BinaryReader binaryReader, long startOffset, GameIDs gameID)
-        {
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Money, SeekOrigin.Begin);
-            Money = binaryReader.ReadUInt32();
-        }
     }
 }
