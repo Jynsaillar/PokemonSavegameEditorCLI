@@ -12,7 +12,7 @@ namespace PokemonSaves
         public GameIDs GameID { get => _gameID; }
 
         /// <summary>
-        /// Reads a Ruby/Sapphire save file from a binary reader's stream using
+        /// Reads a Emerald save file from a binary reader's stream using
         /// <code>
         /// ReadFromBinary(BinaryReader binaryReader)
         /// </code>.

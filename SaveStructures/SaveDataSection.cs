@@ -7,11 +7,11 @@ namespace PokemonSaves
         SectionData _data;
         DataSectionTypes _sectionId;
         short _checksum;
-        uint _saveIndex;
+        int _saveIndex;
         public SectionData Data { get => _data; set => _data = value; }
         public DataSectionTypes SectionID { get => _sectionId; set => _sectionId = value; }
         public short Checksum { get => _checksum; set => _checksum = value; }
-        public uint SaveIndex { get => _saveIndex; set => _saveIndex = value; }
+        public int SaveIndex { get => _saveIndex; set => _saveIndex = value; }
 
         public enum Offsets : long
         {
@@ -34,7 +34,7 @@ namespace PokemonSaves
         protected void ReadSaveIndex(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.SaveIndex, SeekOrigin.Begin);
-            SaveIndex = binaryReader.ReadUInt32();
+            SaveIndex = binaryReader.ReadInt32();
         }
         protected void ReadData(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
@@ -45,46 +45,45 @@ namespace PokemonSaves
             switch (SectionID)
             {
                 case DataSectionTypes.TrainerInfo:
-                    TrainerInfo trainerInfo;
                     switch (gameID)
                     {
                         case GameIDs.FireRedLeafGreen:
-                            trainerInfo = new TrainerInfoFRLG();
+                            var trainerInfoFRLG = new TrainerInfoFRLG();
+                            trainerInfoFRLG.ReadFromBinary(binaryReader, gameID);
+                            Data = trainerInfoFRLG; // Box TrainerInfo into SectionData type.
                             break;
                         case GameIDs.RubySapphire:
-                            trainerInfo = new TrainerInfoRS();
+                            var trainerInfoRS = new TrainerInfoRS();
+                            trainerInfoRS.ReadFromBinary(binaryReader, gameID);
+                            Data = trainerInfoRS; // Box TrainerInfo into SectionData type.
                             break;
                         case GameIDs.Emerald:
-                            trainerInfo = new TrainerInfoE();
-                            break;
-                        default:
-                            trainerInfo = new TrainerInfo();
+                            var trainerInfoE = new TrainerInfoE();
+                            trainerInfoE.ReadFromBinary(binaryReader, gameID);
+                            Data = trainerInfoE; // Box TrainerInfo into SectionData type.
                             break;
                     }
-                    trainerInfo.ReadFromBinary(binaryReader, gameID); // Parses SectionData as TrainerInfo since the SectionID matches TrainerInfo.
-                    Data = trainerInfo; // Box TrainerInfo into SectionData type.
+
                     break;
                 case DataSectionTypes.TeamAndItems:
-                    TeamAndItems teamAndItems;
                     switch (gameID)
                     {
                         case GameIDs.FireRedLeafGreen:
-                            teamAndItems = new TeamAndItemsFRLG();
+                            var teamAndItemsFRLG = new TeamAndItemsFRLG();
+                            teamAndItemsFRLG.ReadFromBinary(binaryReader, gameID);
+                            Data = teamAndItemsFRLG; // Box TeamAndItems into SectionData type.
                             break;
                         case GameIDs.RubySapphire:
-                            teamAndItems = new TeamAndItems();
-                            // TODO: Implement case TeamAndItemsRS.
+                            var teamAndItemsRS = new TeamAndItemsRS();
+                            teamAndItemsRS.ReadFromBinary(binaryReader, gameID);
+                            Data = teamAndItemsRS; // Box TeamAndItems into SectionData type.
                             break;
                         case GameIDs.Emerald:
-                            teamAndItems = new TeamAndItems();
-                            // TODO: Implement case TeamAndItemsE.
-                            break;
-                        default:
-                            teamAndItems = new TeamAndItems();
+                            var teamAndItemsE = new TeamAndItemsE();
+                            teamAndItemsE.ReadFromBinary(binaryReader, gameID);
+                            Data = teamAndItemsE; // Box TeamAndItems into SectionData type.
                             break;
                     }
-                    teamAndItems.ReadFromBinary(binaryReader, gameID); // Parses SectionData as TeamAndItems since the SectionID matches TeamAndItems.
-                    Data = teamAndItems; // Box TeamAndItems into SectionData type.
                     break;
                 case DataSectionTypes.GameState:
                     // TODO: Implement case GameState.
@@ -147,7 +146,7 @@ namespace PokemonSaves
         SectionData Data { get; set; }
         DataSectionTypes SectionID { get; set; }
         short Checksum { get; set; }
-        uint SaveIndex { get; set; }
+        int SaveIndex { get; set; }
     }
 
 }

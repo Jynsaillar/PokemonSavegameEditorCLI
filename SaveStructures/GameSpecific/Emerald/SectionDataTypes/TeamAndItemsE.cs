@@ -3,20 +3,20 @@ using System.Collections.Generic;
 
 namespace PokemonSaves
 {
-    public class TeamAndItemsFRLG : TeamAndItems
+    public partial class TeamAndItemsE : TeamAndItems
     {
         public new enum Offsets : long
         {
-            TeamSize = 0x0034,
-            TeamPokemonList = 0x0038,
-            Money = 0x0290,
-            Coins = 0x0294,
-            PCItems = 0x0298,
-            ItemPocket = 0x0310,
-            KeyItemPocket = 0x03B8,
-            BallItemPocket = 0x0430,
-            TMCase = 0x0464,
-            BerryPocket = 0x054C
+            TeamSize = 0x0234,
+            TeamPokemonList = 0x0238,
+            Money = 0x0490,
+            Coins = 0x0494,
+            PCItems = 0x0498,
+            ItemPocket = 0x0560,
+            KeyItemPocket = 0x05D8,
+            BallItemPocket = 0x0650,
+            TMCase = 0x0690,
+            BerryPocket = 0x0790
         }
 
         protected override void ReadTeamSize(BinaryReader binaryReader, long startOffset, GameIDs gameID)
@@ -94,8 +94,8 @@ namespace PokemonSaves
         {
             // Since this is the last entry in a dynamically allocated block the size has to be provided.
             // Since FRLG, RS and E differ in berry pocket size, the function has to be overriden in version-specific child classes (e.g. TeamAndItemsFRLG.ReadBerryPocket(...)).
-            // FRLG has 172 bytes allocated for berries / 4 = 43 unique berries may be stored at most.
-            var berryPocketCount = (uint)(172 / sizeof(uint)); // Item contains two ushorts, so each item is 4 bytes in size.
+            // E has 184 bytes allocated for berries / 4 = 46 unique berries may be stored at most.
+            var berryPocketCount = (uint)(184 / sizeof(uint)); // Item contains two ushorts, so each item is 4 bytes in size.
             BerryPocket = ReadItemList(binaryReader, startOffset + (long)Offsets.BerryPocket, gameID, berryPocketCount);
         }
     }

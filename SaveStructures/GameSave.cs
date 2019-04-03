@@ -15,7 +15,7 @@ namespace PokemonSaves
             SaveDataSections = new HashSet<SaveDataSection>(14);
         }
 
-        public uint GetLastSaveIndex()
+        public int GetLastSaveIndex()
         {
             // Since SaveDataSections is a HashSet and we want any SaveIndex (since they're all the same),
             // loop the sections and simply return the SaveIndex of the very first section found.
@@ -27,13 +27,21 @@ namespace PokemonSaves
             return 0;
         }
 
-        public TrainerInfo GetTrainerInfo()
+        public object GetTrainerInfo(GameIDs gameID)
         {
             foreach (var saveDataSection in SaveDataSections)
             {
                 if (saveDataSection.SectionID == DataSectionTypes.TrainerInfo)
                 {
-                    return (TrainerInfo)saveDataSection.Data;
+                    switch (gameID)
+                    {
+                        case GameIDs.FireRedLeafGreen:
+                            return (TrainerInfoFRLG)saveDataSection.Data;
+                        case GameIDs.RubySapphire:
+                            return (TrainerInfoRS)saveDataSection.Data;
+                        case GameIDs.Emerald:
+                            return (TrainerInfoE)saveDataSection.Data;
+                    }
                 }
             }
             return null;
@@ -53,8 +61,7 @@ namespace PokemonSaves
                             // TODO: TeamAndItemsRS case.
                             break;
                         case GameIDs.Emerald:
-                            // TODO: TeamAndItemsE case.
-                            break;
+                            return (TeamAndItemsE)saveDataSection.Data;
                     }
 
                     return (TeamAndItems)saveDataSection.Data;
@@ -78,6 +85,6 @@ namespace PokemonSaves
     interface IGameSave
     {
         HashSet<SaveDataSection> SaveDataSections { get; set; }
-        uint GetLastSaveIndex();
+        int GetLastSaveIndex();
     }
 }

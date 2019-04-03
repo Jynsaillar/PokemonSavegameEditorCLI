@@ -29,10 +29,10 @@ namespace PokemonSaves
 
         public GameSave GetActiveSave()
         {
-            uint LastSaveIndexA = GameSaveA.GetLastSaveIndex();
-            uint LastSaveIndexB = GameSaveB.GetLastSaveIndex();
+            int LastSaveIndexA = GameSaveA.GetLastSaveIndex();
+            int LastSaveIndexB = GameSaveB.GetLastSaveIndex();
 
-            if (LastSaveIndexA > LastSaveIndexB || (LastSaveIndexA == 0 && LastSaveIndexB == 0))
+            if (LastSaveIndexA > LastSaveIndexB || (LastSaveIndexA <= 0 && LastSaveIndexB <= 0))
             {
                 return GameSaveA;
             }

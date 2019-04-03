@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PokemonSaves
 {
-    public partial class TeamAndItems : SectionData, IBinaryParsable
+    public abstract class TeamAndItems : SectionData, IBinaryParsable
     {
         private uint _teamSize; // Capped at 6.
         private List<Pokemon> _teamPokemonList; // 600 bytes / 100 bytes per Pokemon entry = 6 Pokemon max in team
@@ -29,16 +29,16 @@ namespace PokemonSaves
 
         public enum Offsets : long
         {
-            TeamSize = 0x0034,
-            TeamPokemonList = 0x0038,
-            Money = 0x0290,
-            Coins = 0x0294,
-            PCItems = 0x0298,
-            ItemPocket = 0x0310,
-            KeyItemPocket = 0x03B8,
-            BallItemPocket = 0x0430,
-            TMCase = 0x0464,
-            BerryPocket = 0x054C
+            TeamSize = 0x0000,
+            TeamPokemonList = 0x0000,
+            Money = 0x0000,
+            Coins = 0x0000,
+            PCItems = 0x0000,
+            ItemPocket = 0x0000,
+            KeyItemPocket = 0x0000,
+            BallItemPocket = 0x0000,
+            TMCase = 0x0000,
+            BerryPocket = 0x0000
         }
 
         public TeamAndItems()
@@ -52,71 +52,36 @@ namespace PokemonSaves
             BerryPocket = new List<Item>();
         }
 
-        protected void ReadTeamSize(BinaryReader binaryReader, long startOffset, GameIDs gameID)
-        {
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.TeamSize, SeekOrigin.Begin);
-            TeamSize = binaryReader.ReadUInt32();
-        }
+        protected abstract void ReadTeamSize(BinaryReader binaryReader, long startOffset, GameIDs gameID);
 
-        protected void ReadTeamPokemonList(BinaryReader binaryReader, long startOffset, GameIDs gameID)
-        {
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.TeamPokemonList, SeekOrigin.Begin);
-            if (null == TeamPokemonList)
-            {
-                TeamPokemonList = new List<Pokemon>();
-            }
-            for (int i = 0; i < 6; i++)
-            {
-                Pokemon pokemon = new Pokemon();
-                pokemon.ReadFromBinary(binaryReader, gameID);
-                TeamPokemonList.Add(pokemon);
-            }
-        }
+        protected abstract void ReadTeamPokemonList(BinaryReader binaryReader, long startOffset, GameIDs gameID);
 
-        protected void ReadMoney(BinaryReader binaryReader, long startOffset, GameIDs gameID)
-        {
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Money, SeekOrigin.Begin);
-            Money = binaryReader.ReadUInt32();
-        }
+        protected abstract void ReadMoney(BinaryReader binaryReader, long startOffset, GameIDs gameID);
 
-        protected void ReadCoins(BinaryReader binaryReader, long startOffset, GameIDs gameID)
-        {
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Coins, SeekOrigin.Begin);
-            Coins = binaryReader.ReadUInt16();
-        }
+        protected abstract void ReadCoins(BinaryReader binaryReader, long startOffset, GameIDs gameID);
 
-        protected void ReadPCItems(BinaryReader binaryReader, long startOffset, GameIDs gameID)
-        {
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.PCItems, SeekOrigin.Begin);
-            var pcItemCount = (uint)((Offsets.ItemPocket - Offsets.PCItems) / sizeof(uint)); // Item contains two ushorts, so each item is 4 bytes in size.
-            for (int i = 0; i < pcItemCount; i++)
-            {
-                var item = new Item();
-                item.ReadFromBinary(binaryReader, gameID);
-                PCItems.Add(item);
-            }
-        }
-        protected void ReadItemPocket(BinaryReader binaryReader, long startOffset, GameIDs gameID)
-        {
-            binaryReader.BaseStream.Seek(startOffset + (long)Offsets.ItemPocket, SeekOrigin.Begin);
-            var itemPocketCount = (uint)((Offsets.KeyItemPocket - Offsets.ItemPocket) / sizeof(uint)); // Item contains two ushorts, so each item is 4 bytes in size.
-            for (int i = 0; i < itemPocketCount; i++)
-            {
-                var item = new Item();
-                item.ReadFromBinary(binaryReader, gameID);
-                ItemPocket.Add(item);
-            }
-        }
-        public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
+        protected abstract List<Item> ReadItemList(BinaryReader binaryReader, long startOffset, GameIDs gameID, uint itemCount);
+
+        protected abstract void ReadPCItems(BinaryReader binaryReader, long startOffset, GameIDs gameID);
+        protected abstract void ReadItemPocket(BinaryReader binaryReader, long startOffset, GameIDs gameID);
+        protected abstract void ReadKeyItemPocket(BinaryReader binaryReader, long startOffset, GameIDs gameID);
+        protected abstract void ReadBallItemPocket(BinaryReader binaryReader, long startOffset, GameIDs gameID);
+        protected abstract void ReadTMCase(BinaryReader binaryReader, long startOffset, GameIDs gameID);
+        protected abstract void ReadBerryPocket(BinaryReader binaryReader, long startOffset, GameIDs gameID);
+
+        public virtual void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
             long startOffset = binaryReader.BaseStream.Position;
-            // TODO: TeamAndItems.ReadFromBinary(...) implementation.
             ReadTeamSize(binaryReader, startOffset, gameID); // TeamSize
             ReadTeamPokemonList(binaryReader, startOffset, gameID); // TeamPokemonList
             ReadMoney(binaryReader, startOffset, gameID); // Money
             ReadCoins(binaryReader, startOffset, gameID); // Coins
             ReadPCItems(binaryReader, startOffset, gameID); // PCItems
             ReadItemPocket(binaryReader, startOffset, gameID); // ItemPocket
+            ReadKeyItemPocket(binaryReader, startOffset, gameID); // KeyItemPocket
+            ReadBallItemPocket(binaryReader, startOffset, gameID); // BallItemPocket
+            ReadTMCase(binaryReader, startOffset, gameID); // TMCase
+            ReadBerryPocket(binaryReader, startOffset, gameID); // BerryPocket
         }
     }
 }

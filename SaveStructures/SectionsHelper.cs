@@ -65,7 +65,7 @@ namespace PokemonSaves
         }
     }
 
-    public enum DataSectionTypes : ushort
+    public enum DataSectionTypes : short
     {
         TrainerInfo,
         TeamAndItems,
