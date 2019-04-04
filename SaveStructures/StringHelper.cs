@@ -39,26 +39,48 @@ namespace PokemonSaves
         /// </code>
         /// <para/>or https://bulbapedia.bulbagarden.net/wiki/Character_encoding_in_Generation_III#International.
         /// </summary>
-        public static string GameStringToReadableString(long gameString, bool international)
+        public static string GameStringToReadableString(long gameString, Charset charset)
         {
             byte[] gameStringBytes = BitConverter.GetBytes(gameString);
             StringBuilder stringBuilder = new StringBuilder();
             foreach (byte b in gameStringBytes)
             {
-                stringBuilder.Append(international ? CharacterMapInternational[b] : CharacterMapJapanese[b]);
+                switch (charset)
+                {
+                    case Charset.Japanese:
+                        stringBuilder.Append(CharacterMapJapanese[b]);
+                        break;
+                    case Charset.International:
+                        stringBuilder.Append(CharacterMapInternational[b]);
+                        break;
+                }
             }
             return stringBuilder.ToString();
         }
 
-        public static string GameStringToReadableString(byte[] gameString, bool international)
+        public static string GameStringToReadableString(byte[] gameString, Charset charset)
         {
             byte[] gameStringBytes = gameString;
             StringBuilder stringBuilder = new StringBuilder();
             foreach (byte b in gameStringBytes)
             {
-                stringBuilder.Append(international ? CharacterMapInternational[b] : CharacterMapJapanese[b]);
+                switch (charset)
+                {
+                    case Charset.Japanese:
+                        stringBuilder.Append(CharacterMapJapanese[b]);
+                        break;
+                    case Charset.International:
+                        stringBuilder.Append(CharacterMapInternational[b]);
+                        break;
+                }
             }
             return stringBuilder.ToString();
+        }
+
+        public enum Charset : byte
+        {
+            Japanese = 0,
+            International = 1
         }
     }
 }
