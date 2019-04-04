@@ -5,7 +5,9 @@ namespace PokemonSaves
 {
     public class GameSave : IGameSave, IBinaryParsable
     {
+        private long _startOffset;
         HashSet<SaveDataSection> _saveDataSections;
+        public long StartOffset { get => _startOffset; set => _startOffset = value; }
         public HashSet<SaveDataSection> SaveDataSections { get => _saveDataSections; set => _saveDataSections = value; }
 
         public GameSave()
@@ -58,13 +60,10 @@ namespace PokemonSaves
                         case GameIDs.FireRedLeafGreen:
                             return (TeamAndItemsFRLG)saveDataSection.Data;
                         case GameIDs.RubySapphire:
-                            // TODO: TeamAndItemsRS case.
-                            break;
+                            return (TeamAndItemsRS)saveDataSection.Data;
                         case GameIDs.Emerald:
                             return (TeamAndItemsE)saveDataSection.Data;
                     }
-
-                    return (TeamAndItems)saveDataSection.Data;
                 }
             }
             return null;
@@ -72,6 +71,7 @@ namespace PokemonSaves
 
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
+            StartOffset = binaryReader.BaseStream.Position;
             // 14 SaveDataSections in total.
             for (int i = 0; i < 14; i++)
             {
