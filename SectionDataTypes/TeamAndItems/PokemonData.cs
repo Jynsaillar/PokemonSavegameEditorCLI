@@ -2,13 +2,15 @@ using System.IO;
 
 namespace PokemonSaves
 {
-    public class PokemonData
+    public class PokemonData : IBinaryParsable
     {
+        private long _startOffset;
         private Pokemon _owningPokemon;
         private Growth _growth;
         private Attacks _attacks;
         private EVsAndConditions _evsAndConditions;
         private Miscellaneous _miscellaneous;
+        public long StartOffset { get => _startOffset; set => _startOffset = value; }
         public Pokemon OwningPokemon { get => _owningPokemon; private set => _owningPokemon = value; }
         public Growth Growth { get => _growth; set => _growth = value; }
         public Attacks Attacks { get => _attacks; set => _attacks = value; }
@@ -29,33 +31,25 @@ namespace PokemonSaves
         {
             OwningPokemon = owningPokemon;
         }
-        protected void ReadGrowth(BinaryReader binaryReader, ref long startOffset, GameIDs gameID)
+        protected void ReadGrowth(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
             var decryptedSubstructure = ReadAndDecryptEncryptedSubstructure(binaryReader, startOffset, gameID);
             ExtractGrowthFromDecryptedSubstructure(decryptedSubstructure);
-            // Substructure is 12 bytes in size and since the order of the substructures is random, the start offset is incremented for the next substructure read.
-            startOffset += 12;
         }
-        protected void ReadAttacks(BinaryReader binaryReader, ref long startOffset, GameIDs gameID)
+        protected void ReadAttacks(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
             var decryptedSubstructure = ReadAndDecryptEncryptedSubstructure(binaryReader, startOffset, gameID);
             ExtractAttacksFromDecryptedSubstructure(decryptedSubstructure);
-            // Substructure is 12 bytes in size and since the order of the substructures is random, the start offset is incremented for the next substructure read.
-            startOffset += 12;
         }
-        protected void ReadEVsAndConditions(BinaryReader binaryReader, ref long startOffset, GameIDs gameID)
+        protected void ReadEVsAndConditions(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
             var decryptedSubstructure = ReadAndDecryptEncryptedSubstructure(binaryReader, startOffset, gameID);
             ExtractEVsAndConditionsFromDecryptedSubstructure(decryptedSubstructure);
-            // Substructure is 12 bytes in size and since the order of the substructures is random, the start offset is incremented for the next substructure read.
-            startOffset += 12;
         }
-        protected void ReadMiscellaneous(BinaryReader binaryReader, ref long startOffset, GameIDs gameID)
+        protected void ReadMiscellaneous(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
             var decryptedSubstructure = ReadAndDecryptEncryptedSubstructure(binaryReader, startOffset, gameID);
             ExtractMiscellaneousFromDecryptedSubstructure(decryptedSubstructure);
-            // Substructure is 12 bytes in size and since the order of the substructures is random, the start offset is incremented for the next substructure read.
-            startOffset += 12;
         }
 
         protected uint[] ReadAndDecryptEncryptedSubstructure(BinaryReader binaryReader, long startOffset, GameIDs gameID)
@@ -146,156 +140,156 @@ namespace PokemonSaves
             switch (orderID)
             {
                 case 00:
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
+                    ReadGrowth(binaryReader, startOffset, gameID);
+                    ReadAttacks(binaryReader, startOffset + 12, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 24, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 32, gameID);
                     break;
                 case 01:
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
+                    ReadGrowth(binaryReader, startOffset, gameID);
+                    ReadAttacks(binaryReader, startOffset + 12, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 24, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 32, gameID);
                     break;
                 case 02:
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
+                    ReadGrowth(binaryReader, startOffset, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 12, gameID);
+                    ReadAttacks(binaryReader, startOffset + 24, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 32, gameID);
                     break;
                 case 03:
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
+                    ReadGrowth(binaryReader, startOffset, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 12, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 24, gameID);
+                    ReadAttacks(binaryReader, startOffset + 32, gameID);
                     break;
                 case 04:
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
+                    ReadGrowth(binaryReader, startOffset, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 12, gameID);
+                    ReadAttacks(binaryReader, startOffset + 24, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 32, gameID);
                     break;
                 case 05:
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
+                    ReadGrowth(binaryReader, startOffset, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 12, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 24, gameID);
+                    ReadAttacks(binaryReader, startOffset + 32, gameID);
                     break;
                 case 06:
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
+                    ReadAttacks(binaryReader, startOffset, gameID);
+                    ReadGrowth(binaryReader, startOffset + 12, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 24, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 32, gameID);
                     break;
                 case 07:
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
+                    ReadAttacks(binaryReader, startOffset, gameID);
+                    ReadGrowth(binaryReader, startOffset + 12, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 24, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 32, gameID);
                     break;
                 case 08:
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
+                    ReadAttacks(binaryReader, startOffset, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 12, gameID);
+                    ReadGrowth(binaryReader, startOffset + 24, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 32, gameID);
                     break;
                 case 09:
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
+                    ReadAttacks(binaryReader, startOffset, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 12, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 24, gameID);
+                    ReadGrowth(binaryReader, startOffset + 32, gameID);
                     break;
                 case 10:
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
+                    ReadAttacks(binaryReader, startOffset, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 12, gameID);
+                    ReadGrowth(binaryReader, startOffset + 24, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 32, gameID);
                     break;
                 case 11:
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
+                    ReadAttacks(binaryReader, startOffset, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 12, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 24, gameID);
+                    ReadGrowth(binaryReader, startOffset + 32, gameID);
                     break;
                 case 12:
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset, gameID);
+                    ReadGrowth(binaryReader, startOffset + 12, gameID);
+                    ReadAttacks(binaryReader, startOffset + 24, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 32, gameID);
                     break;
                 case 13:
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset, gameID);
+                    ReadGrowth(binaryReader, startOffset + 12, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 24, gameID);
+                    ReadAttacks(binaryReader, startOffset + 32, gameID);
                     break;
                 case 14:
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset, gameID);
+                    ReadAttacks(binaryReader, startOffset + 12, gameID);
+                    ReadGrowth(binaryReader, startOffset + 24, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 32, gameID);
                     break;
                 case 15:
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset, gameID);
+                    ReadAttacks(binaryReader, startOffset + 12, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 24, gameID);
+                    ReadGrowth(binaryReader, startOffset + 32, gameID);
                     break;
                 case 16:
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 12, gameID);
+                    ReadGrowth(binaryReader, startOffset + 24, gameID);
+                    ReadAttacks(binaryReader, startOffset + 32, gameID);
                     break;
                 case 17:
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset + 12, gameID);
+                    ReadAttacks(binaryReader, startOffset + 24, gameID);
+                    ReadGrowth(binaryReader, startOffset + 32, gameID);
                     break;
                 case 18:
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset, gameID);
+                    ReadGrowth(binaryReader, startOffset + 12, gameID);
+                    ReadAttacks(binaryReader, startOffset + 24, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 32, gameID);
                     break;
                 case 19:
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset, gameID);
+                    ReadGrowth(binaryReader, startOffset + 12, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 24, gameID);
+                    ReadAttacks(binaryReader, startOffset + 32, gameID);
                     break;
                 case 20:
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset, gameID);
+                    ReadAttacks(binaryReader, startOffset + 12, gameID);
+                    ReadGrowth(binaryReader, startOffset + 24, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 32, gameID);
                     break;
                 case 21:
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset, gameID);
+                    ReadAttacks(binaryReader, startOffset + 12, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 24, gameID);
+                    ReadGrowth(binaryReader, startOffset + 32, gameID);
                     break;
                 case 22:
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 12, gameID);
+                    ReadGrowth(binaryReader, startOffset + 24, gameID);
+                    ReadAttacks(binaryReader, startOffset + 32, gameID);
                     break;
                 case 23:
-                    ReadMiscellaneous(binaryReader, ref startOffset, gameID);
-                    ReadEVsAndConditions(binaryReader, ref startOffset, gameID);
-                    ReadAttacks(binaryReader, ref startOffset, gameID);
-                    ReadGrowth(binaryReader, ref startOffset, gameID);
+                    ReadMiscellaneous(binaryReader, startOffset, gameID);
+                    ReadEVsAndConditions(binaryReader, startOffset + 12, gameID);
+                    ReadAttacks(binaryReader, startOffset + 24, gameID);
+                    ReadGrowth(binaryReader, startOffset + 32, gameID);
                     break;
             }
         }
 
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            ParseGAMEInProperOrder(binaryReader, startOffset, gameID); // Growth, Attacks, Miscellaneous, EVsAndConditions (GAME)
+            StartOffset = binaryReader.BaseStream.Position;
+            ParseGAMEInProperOrder(binaryReader, StartOffset, gameID); // Growth, Attacks, Miscellaneous, EVsAndConditions (GAME)
         }
     }
 }

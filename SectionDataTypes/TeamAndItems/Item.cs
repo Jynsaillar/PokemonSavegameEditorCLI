@@ -4,8 +4,10 @@ namespace PokemonSaves
 {
     public class Item : IBinaryParsable
     {
+        private long _startOffset;
         ushort _itemIndex;
         ushort _itemQuantity;
+        public long StartOffset { get => _startOffset; set => _startOffset = value; }
         public ushort ItemIndex { get => _itemIndex; set => _itemIndex = value; }
         public ushort ItemQuantity { get => _itemQuantity; set => _itemQuantity = value; }
 
@@ -25,8 +27,8 @@ namespace PokemonSaves
 
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            ReadItemIndexAndQuantity(binaryReader, startOffset, gameID); // ItemIndex and ItemQuantity
+            StartOffset = binaryReader.BaseStream.Position;
+            ReadItemIndexAndQuantity(binaryReader, StartOffset, gameID); // ItemIndex and ItemQuantity
         }
     }
 }

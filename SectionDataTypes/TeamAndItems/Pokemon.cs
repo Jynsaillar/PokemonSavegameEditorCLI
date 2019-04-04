@@ -4,6 +4,7 @@ namespace PokemonSaves
 {
     public class Pokemon : IBinaryParsable
     {
+        private long _startOffset;
         private uint _personalityValue;
         private uint _otID;
         private byte[] _nickname; // 10 bytes
@@ -23,6 +24,7 @@ namespace PokemonSaves
         private ushort _speed;
         private ushort _specialAttack;
         private ushort _specialDefense;
+        public long StartOffset { get => _startOffset; set => _startOffset = value; }
         public uint PersonalityValue { get => _personalityValue; set => _personalityValue = value; }
         public uint OTID { get => _otID; set => _otID = value; }
         public byte[] Nickname { get => _nickname; set => _nickname = value; }
@@ -170,25 +172,25 @@ namespace PokemonSaves
 
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            ReadPersonalityValue(binaryReader, startOffset, gameID); // PersonalityValue
-            ReadOTID(binaryReader, startOffset, gameID); // OTID
-            ReadNickname(binaryReader, startOffset, gameID); // Nickname
-            ReadLanguage(binaryReader, startOffset, gameID); // Language
-            ReadOTName(binaryReader, startOffset, gameID); // OTName
-            ReadMarkings(binaryReader, startOffset, gameID); // Markings
-            ReadUnknownValue(binaryReader, startOffset, gameID); // UnknownValue
-            ReadPokemonData(binaryReader, startOffset, gameID); // PokemonData
-            ReadStatusCondition(binaryReader, startOffset, gameID); // StatusCondition
-            ReadLevel(binaryReader, startOffset, gameID); // Level
-            ReadPokerusRemaining(binaryReader, startOffset, gameID); // PokerusRemaining
-            ReadCurrentHP(binaryReader, startOffset, gameID); // CurrentHP
-            ReadTotalHP(binaryReader, startOffset, gameID); // TotalHP
-            ReadAttack(binaryReader, startOffset, gameID); // Attack
-            ReadDefense(binaryReader, startOffset, gameID); // Defense
-            ReadSpeed(binaryReader, startOffset, gameID); // Speed
-            ReadSpecialAttack(binaryReader, startOffset, gameID); // SpecialAttack
-            ReadSpecialDefense(binaryReader, startOffset, gameID); // SpecialDefense
+            StartOffset = binaryReader.BaseStream.Position;
+            ReadPersonalityValue(binaryReader, StartOffset, gameID); // PersonalityValue
+            ReadOTID(binaryReader, StartOffset, gameID); // OTID
+            ReadNickname(binaryReader, StartOffset, gameID); // Nickname
+            ReadLanguage(binaryReader, StartOffset, gameID); // Language
+            ReadOTName(binaryReader, StartOffset, gameID); // OTName
+            ReadMarkings(binaryReader, StartOffset, gameID); // Markings
+            ReadUnknownValue(binaryReader, StartOffset, gameID); // UnknownValue
+            ReadPokemonData(binaryReader, StartOffset, gameID); // PokemonData
+            ReadStatusCondition(binaryReader, StartOffset, gameID); // StatusCondition
+            ReadLevel(binaryReader, StartOffset, gameID); // Level
+            ReadPokerusRemaining(binaryReader, StartOffset, gameID); // PokerusRemaining
+            ReadCurrentHP(binaryReader, StartOffset, gameID); // CurrentHP
+            ReadTotalHP(binaryReader, StartOffset, gameID); // TotalHP
+            ReadAttack(binaryReader, StartOffset, gameID); // Attack
+            ReadDefense(binaryReader, StartOffset, gameID); // Defense
+            ReadSpeed(binaryReader, StartOffset, gameID); // Speed
+            ReadSpecialAttack(binaryReader, StartOffset, gameID); // SpecialAttack
+            ReadSpecialDefense(binaryReader, StartOffset, gameID); // SpecialDefense
         }
     }
 }

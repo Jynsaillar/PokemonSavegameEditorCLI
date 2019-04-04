@@ -5,12 +5,14 @@ namespace PokemonSaves
 {
     public class Options : IBinaryParsable
     {
+        private long _startOffset;
         private ButtonMode _buttonMode;
         private TextSpeed _textSpeed;
         private FrameStyle _frameStyle;
         private SoundMode _soundMode;
         private BattleStyle _battleStyle;
         private BattleScene _battleScene;
+        public long StartOffset { get => _startOffset; set => _startOffset = value; }
         public ButtonMode ButtonMode { get => _buttonMode; set => _buttonMode = value; }
         public TextSpeed TextSpeed { get => _textSpeed; set => _textSpeed = value; }
         public FrameStyle FrameStyle { get => _frameStyle; set => _frameStyle = value; }
@@ -46,10 +48,10 @@ namespace PokemonSaves
 
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            ReadButtonMode(binaryReader, startOffset, gameID);// ButtonMode
-            ReadTextSpeedFrameStyle(binaryReader, startOffset, gameID);// TextSpeed & FrameStyle
-            ReadSoundModeBattleStyleBattleScene(binaryReader, startOffset, gameID);// SoundMode, BattleStyle & BattleScene
+            StartOffset = binaryReader.BaseStream.Position;
+            ReadButtonMode(binaryReader, StartOffset, gameID);// ButtonMode
+            ReadTextSpeedFrameStyle(binaryReader, StartOffset, gameID);// TextSpeed & FrameStyle
+            ReadSoundModeBattleStyleBattleScene(binaryReader, StartOffset, gameID);// SoundMode, BattleStyle & BattleScene
         }
     }
 }

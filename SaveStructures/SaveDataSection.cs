@@ -4,10 +4,12 @@ namespace PokemonSaves
 {
     public class SaveDataSection : IDataSection, IBinaryParsable
     {
+        private long _startOffset;
         SectionData _data;
         DataSectionTypes _sectionId;
         short _checksum;
         int _saveIndex;
+        public long StartOffset { get => _startOffset; set => _startOffset = value; }
         public SectionData Data { get => _data; set => _data = value; }
         public DataSectionTypes SectionID { get => _sectionId; set => _sectionId = value; }
         public short Checksum { get => _checksum; set => _checksum = value; }
@@ -133,11 +135,11 @@ namespace PokemonSaves
         }
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            ReadSectionID(binaryReader, startOffset, gameID);// SectionID
-            ReadChecksum(binaryReader, startOffset, gameID);// Checksum
-            ReadSaveIndex(binaryReader, startOffset, gameID);// SaveIndex
-            ReadData(binaryReader, startOffset, gameID);// Data
+            StartOffset = binaryReader.BaseStream.Position;
+            ReadSectionID(binaryReader, StartOffset, gameID);// SectionID
+            ReadChecksum(binaryReader, StartOffset, gameID);// Checksum
+            ReadSaveIndex(binaryReader, StartOffset, gameID);// SaveIndex
+            ReadData(binaryReader, StartOffset, gameID);// Data
         }
     }
 

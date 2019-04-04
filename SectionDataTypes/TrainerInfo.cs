@@ -6,6 +6,7 @@ namespace PokemonSaves
 {
     public abstract class TrainerInfo : SectionData, IBinaryParsable
     {
+        private long _startOffset;
         private long _playerName;
         private byte _playerGender;
         private TrainerId _trainerID;
@@ -13,6 +14,7 @@ namespace PokemonSaves
         private Options _options;
         private uint _gameCode;
         private uint _securityKey;
+        public long StartOffset { get => _startOffset; set => _startOffset = value; }
         public long PlayerName { get => _playerName; set => _playerName = value; }
         public byte PlayerGender { get => _playerGender; set => _playerGender = value; }
         public TrainerId TrainerID { get => _trainerID; set => _trainerID = value; }
@@ -58,14 +60,14 @@ namespace PokemonSaves
 
         public virtual void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            ReadPlayerName(binaryReader, startOffset); // PlayerName
-            ReadPlayerGender(binaryReader, startOffset); // PlayerGender
-            ReadTrainerId(binaryReader, startOffset, gameID); // TrainerID
-            ReadTimePlayed(binaryReader, startOffset, gameID); // TimePlayed
-            ReadOptions(binaryReader, startOffset, gameID); // Options
-            ReadGameCode(binaryReader, startOffset, gameID); // GameCode
-            ReadSecurityKey(binaryReader, startOffset, gameID); // SecurityKey
+            StartOffset = binaryReader.BaseStream.Position;
+            ReadPlayerName(binaryReader, StartOffset); // PlayerName
+            ReadPlayerGender(binaryReader, StartOffset); // PlayerGender
+            ReadTrainerId(binaryReader, StartOffset, gameID); // TrainerID
+            ReadTimePlayed(binaryReader, StartOffset, gameID); // TimePlayed
+            ReadOptions(binaryReader, StartOffset, gameID); // Options
+            ReadGameCode(binaryReader, StartOffset, gameID); // GameCode
+            ReadSecurityKey(binaryReader, StartOffset, gameID); // SecurityKey
         }
 
     }

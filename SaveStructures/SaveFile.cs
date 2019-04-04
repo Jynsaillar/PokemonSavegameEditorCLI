@@ -4,8 +4,10 @@ namespace PokemonSaves
 {
     public class SaveFile : ISaveFile, IBinaryParsable
     {
+        private long _startOffset;
         GameSave _gameSaveA;
         GameSave _gameSaveB;
+        public long StartOffset { get => _startOffset; set => _startOffset = value; }
         public GameSave GameSaveA { get => _gameSaveA; set => _gameSaveA = value; }
         public GameSave GameSaveB { get => _gameSaveB; set => _gameSaveB = value; }
         /// TODO: HallOfFame
@@ -52,9 +54,9 @@ namespace PokemonSaves
         }
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            ReadGameSaveA(binaryReader, startOffset, gameID);// GameSave A
-            ReadGameSaveB(binaryReader, startOffset, gameID);//GameSave B
+            StartOffset = binaryReader.BaseStream.Position;
+            ReadGameSaveA(binaryReader, StartOffset, gameID);// GameSave A
+            ReadGameSaveB(binaryReader, StartOffset, gameID);//GameSave B
         }
     }
 

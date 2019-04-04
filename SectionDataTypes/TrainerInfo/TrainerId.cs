@@ -5,9 +5,11 @@ namespace PokemonSaves
 {
     public class TrainerId : IBinaryParsable
     {
+        private long _startOffset;
 
         private ushort _publicID;
         private ushort _secretID;
+        public long StartOffset { get => _startOffset; set => _startOffset = value; }
         public ushort PublicID { get => _publicID; set => _publicID = value; }
         public ushort SecretID { get => _secretID; set => _secretID = value; }
 
@@ -30,9 +32,9 @@ namespace PokemonSaves
 
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            ReadPublicID(binaryReader, startOffset, gameID); // PublicID
-            ReadSecretID(binaryReader, startOffset, gameID); // SecretID
+            StartOffset = binaryReader.BaseStream.Position;
+            ReadPublicID(binaryReader, StartOffset, gameID); // PublicID
+            ReadSecretID(binaryReader, StartOffset, gameID); // SecretID
         }
     }
 }

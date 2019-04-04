@@ -5,10 +5,12 @@ namespace PokemonSaves
 {
     public class TimePlayed : IBinaryParsable
     {
+        private long _startOffset;
         private ushort _hours;
         private byte _minutes;
         private byte _seconds;
         private byte _frames;
+        public long StartOffset { get => _startOffset; set => _startOffset = value; }
         public ushort Hours { get => _hours; set => _hours = value; }
         public byte Minutes { get => _minutes; set => _minutes = value; }
         public byte Seconds { get => _seconds; set => _seconds = value; }
@@ -47,11 +49,11 @@ namespace PokemonSaves
 
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            ReadHours(binaryReader, startOffset, gameID);// Hours
-            ReadMinutes(binaryReader, startOffset, gameID);// Minutes
-            ReadSeconds(binaryReader, startOffset, gameID);// Seconds
-            ReadFrames(binaryReader, startOffset, gameID);// Frames
+            StartOffset = binaryReader.BaseStream.Position;
+            ReadHours(binaryReader, StartOffset, gameID);// Hours
+            ReadMinutes(binaryReader, StartOffset, gameID);// Minutes
+            ReadSeconds(binaryReader, StartOffset, gameID);// Seconds
+            ReadFrames(binaryReader, StartOffset, gameID);// Frames
         }
     }
 }

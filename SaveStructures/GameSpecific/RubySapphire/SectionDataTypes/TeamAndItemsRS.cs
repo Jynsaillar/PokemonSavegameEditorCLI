@@ -19,6 +19,7 @@ namespace PokemonSaves
             BerryPocket = 0x0740
         }
 
+        // Read functions:
         protected override void ReadTeamSize(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.TeamSize, SeekOrigin.Begin);
@@ -98,5 +99,19 @@ namespace PokemonSaves
             var berryPocketCount = (uint)(184 / sizeof(uint)); // Item contains two ushorts, so each item is 4 bytes in size.
             BerryPocket = ReadItemList(binaryReader, startOffset + (long)Offsets.BerryPocket, gameID, berryPocketCount);
         }
+
+        // Write functions:
+        // TODO: Implement TeamAndItemsRS write functions.
+        protected override void WriteTeamSize() { }
+        protected override void WriteTeamPokemonList() { }
+        protected override void WriteMoney() { }
+        protected override void WriteCoins() { }
+        protected override void WriteItemList() { }
+        protected override void WritePCItems() { }
+        protected override void WriteItemPocket() { }
+        protected override void WriteKeyItemPocket() { }
+        protected override void WriteBallItemPocket() { }
+        protected override void WriteTMCase() { }
+        protected override void WriteBerryPocket() { }
     }
 }

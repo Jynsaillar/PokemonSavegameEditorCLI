@@ -5,6 +5,7 @@ namespace PokemonSaves
 {
     public abstract class TeamAndItems : SectionData, IBinaryParsable
     {
+        private long _startOffset;
         private uint _teamSize; // Capped at 6.
         private List<Pokemon> _teamPokemonList; // 600 bytes / 100 bytes per Pokemon entry = 6 Pokemon max in team
         private uint _money; // Capped at 999 999 PokeDollar.
@@ -15,7 +16,7 @@ namespace PokemonSaves
         private List<Item> _ballItemPocket;
         private List<Item> _tmCase;
         private List<Item> _berryPocket;
-
+        public long StartOffset { get => _startOffset; set => _startOffset = value; }
         public uint TeamSize { get => _teamSize; set => _teamSize = value; }
         public List<Pokemon> TeamPokemonList { get => _teamPokemonList; set => _teamPokemonList = value; }
         public uint Money { get => _money; set => _money = value; }
@@ -52,7 +53,7 @@ namespace PokemonSaves
             BerryPocket = new List<Item>();
         }
 
-// Read functions:
+        // Read functions:
 
         protected abstract void ReadTeamSize(BinaryReader binaryReader, long startOffset, GameIDs gameID);
 
@@ -73,31 +74,31 @@ namespace PokemonSaves
 
         public virtual void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
-            long startOffset = binaryReader.BaseStream.Position;
-            ReadTeamSize(binaryReader, startOffset, gameID); // TeamSize
-            ReadTeamPokemonList(binaryReader, startOffset, gameID); // TeamPokemonList
-            ReadMoney(binaryReader, startOffset, gameID); // Money
-            ReadCoins(binaryReader, startOffset, gameID); // Coins
-            ReadPCItems(binaryReader, startOffset, gameID); // PCItems
-            ReadItemPocket(binaryReader, startOffset, gameID); // ItemPocket
-            ReadKeyItemPocket(binaryReader, startOffset, gameID); // KeyItemPocket
-            ReadBallItemPocket(binaryReader, startOffset, gameID); // BallItemPocket
-            ReadTMCase(binaryReader, startOffset, gameID); // TMCase
-            ReadBerryPocket(binaryReader, startOffset, gameID); // BerryPocket
+            StartOffset = binaryReader.BaseStream.Position;
+            ReadTeamSize(binaryReader, StartOffset, gameID); // TeamSize
+            ReadTeamPokemonList(binaryReader, StartOffset, gameID); // TeamPokemonList
+            ReadMoney(binaryReader, StartOffset, gameID); // Money
+            ReadCoins(binaryReader, StartOffset, gameID); // Coins
+            ReadPCItems(binaryReader, StartOffset, gameID); // PCItems
+            ReadItemPocket(binaryReader, StartOffset, gameID); // ItemPocket
+            ReadKeyItemPocket(binaryReader, StartOffset, gameID); // KeyItemPocket
+            ReadBallItemPocket(binaryReader, StartOffset, gameID); // BallItemPocket
+            ReadTMCase(binaryReader, StartOffset, gameID); // TMCase
+            ReadBerryPocket(binaryReader, StartOffset, gameID); // BerryPocket
         }
 
-// Write functions:
-// TODO: Figure out proper arguments for write functions (e.g. offset?).
-protected abstract void WriteTeamSize();
-protected abstract void WriteTeamPokemonList();
-protected abstract void WriteMoney();
-protected abstract void WriteCoins();
-protected abstract void WriteItemList();
-protected abstract void WritePCItems();
-protected abstract void WriteItemPocket();
-protected abstract void WriteKeyItemPocket();
-protected abstract void WriteBallItemPocket();
-protected abstract void WriteTMCase();
-protected abstract void WriteBerryPocket();
+        // Write functions:
+        // TODO: Figure out proper arguments for write functions (e.g. offset?).
+        protected abstract void WriteTeamSize();
+        protected abstract void WriteTeamPokemonList();
+        protected abstract void WriteMoney();
+        protected abstract void WriteCoins();
+        protected abstract void WriteItemList();
+        protected abstract void WritePCItems();
+        protected abstract void WriteItemPocket();
+        protected abstract void WriteKeyItemPocket();
+        protected abstract void WriteBallItemPocket();
+        protected abstract void WriteTMCase();
+        protected abstract void WriteBerryPocket();
     }
 }
