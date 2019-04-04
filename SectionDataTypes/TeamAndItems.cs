@@ -52,6 +52,8 @@ namespace PokemonSaves
             BerryPocket = new List<Item>();
         }
 
+// Read functions:
+
         protected abstract void ReadTeamSize(BinaryReader binaryReader, long startOffset, GameIDs gameID);
 
         protected abstract void ReadTeamPokemonList(BinaryReader binaryReader, long startOffset, GameIDs gameID);
@@ -83,5 +85,19 @@ namespace PokemonSaves
             ReadTMCase(binaryReader, startOffset, gameID); // TMCase
             ReadBerryPocket(binaryReader, startOffset, gameID); // BerryPocket
         }
+
+// Write functions:
+// TODO: Figure out proper arguments for write functions (e.g. offset?).
+protected abstract void WriteTeamSize();
+protected abstract void WriteTeamPokemonList();
+protected abstract void WriteMoney();
+protected abstract void WriteCoins();
+protected abstract void WriteItemList();
+protected abstract void WritePCItems();
+protected abstract void WriteItemPocket();
+protected abstract void WriteKeyItemPocket();
+protected abstract void WriteBallItemPocket();
+protected abstract void WriteTMCase();
+protected abstract void WriteBerryPocket();
     }
 }
