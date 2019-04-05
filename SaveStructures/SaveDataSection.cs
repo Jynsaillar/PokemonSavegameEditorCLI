@@ -141,6 +141,11 @@ namespace PokemonSaves
             ReadSaveIndex(binaryReader, StartOffset, gameID);// SaveIndex
             ReadData(binaryReader, StartOffset, gameID);// Data
         }
+
+        public void RecalculateChecksum()
+        {
+            // TODO: Implement checksum recalculation.
+        }
     }
 
     interface IDataSection
