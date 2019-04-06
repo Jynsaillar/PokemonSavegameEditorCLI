@@ -14,6 +14,8 @@ namespace PokemonSaves
             GameCode = 0x00AC
         }
 
+        public TrainerInfoRS(SaveDataSection saveDataSection) : base(saveDataSection) { }
+
         protected override void ReadPlayerName(BinaryReader binaryReader, long startOffset)
         {
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.PlayerName, SeekOrigin.Begin);

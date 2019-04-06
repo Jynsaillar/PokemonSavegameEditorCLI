@@ -42,7 +42,7 @@ namespace PokemonSaves
             BerryPocket = 0x0000
         }
 
-        public TeamAndItems()
+        public TeamAndItems(SaveDataSection saveDataSection) : base(saveDataSection)
         {
             TeamPokemonList = new List<Pokemon>();
             PCItems = new List<Item>();

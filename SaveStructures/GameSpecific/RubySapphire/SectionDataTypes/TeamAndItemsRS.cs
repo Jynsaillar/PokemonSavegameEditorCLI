@@ -19,6 +19,8 @@ namespace PokemonSaves
             BerryPocket = 0x0740
         }
 
+        public TeamAndItemsRS(SaveDataSection saveDataSection) : base(saveDataSection) { }
+
         // Read functions:
         protected override void ReadTeamSize(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {

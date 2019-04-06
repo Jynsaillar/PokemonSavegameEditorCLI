@@ -19,6 +19,8 @@ namespace PokemonSaves
             BerryPocket = 0x054C
         }
 
+        public TeamAndItemsFRLG(SaveDataSection saveDataSection) : base(saveDataSection) { }
+
         // Read functions:
 
         protected override void ReadTeamSize(BinaryReader binaryReader, long startOffset, GameIDs gameID)
@@ -103,16 +105,16 @@ namespace PokemonSaves
 
         // Write functions:
         // TODO: Implement TeamAndItemsFRLG write functions.
-        protected override void WriteTeamSize(){}
-        protected override void WriteTeamPokemonList(){}
-        protected override void WriteMoney(){}
-        protected override void WriteCoins(){}
-        protected override void WriteItemList(){}
-        protected override void WritePCItems(){}
-        protected override void WriteItemPocket(){}
-        protected override void WriteKeyItemPocket(){}
-        protected override void WriteBallItemPocket(){}
-        protected override void WriteTMCase(){}
-        protected override void WriteBerryPocket(){}
+        protected override void WriteTeamSize() { }
+        protected override void WriteTeamPokemonList() { }
+        protected override void WriteMoney() { }
+        protected override void WriteCoins() { }
+        protected override void WriteItemList() { }
+        protected override void WritePCItems() { }
+        protected override void WriteItemPocket() { }
+        protected override void WriteKeyItemPocket() { }
+        protected override void WriteBallItemPocket() { }
+        protected override void WriteTMCase() { }
+        protected override void WriteBerryPocket() { }
     }
 }

@@ -44,6 +44,8 @@ namespace PokemonSaves
             SecurityKey = 0x0000
         }
 
+        public TrainerInfo(SaveDataSection saveDataSection) : base(saveDataSection) { }
+
         protected abstract void ReadPlayerName(BinaryReader binaryReader, long startOffset);
 
         protected abstract void ReadPlayerGender(BinaryReader binaryReader, long startOffset);

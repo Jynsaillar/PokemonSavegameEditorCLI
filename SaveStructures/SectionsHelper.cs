@@ -23,7 +23,7 @@ namespace PokemonSaves
         };
 
         /// <summary> Returns the size of a section from its name. </summary>
-        public static uint GetSectionSize(DataSectionTypes sectionName)
+        public static int GetSectionSize(DataSectionTypes sectionName)
         {
             foreach (var sectionType in SectionTypes)
             {
@@ -37,7 +37,7 @@ namespace PokemonSaves
 
         /// <summary> Returns the size of a section in bytes from its section ID. 
         /// The section sizes are fixed. </summary>
-        public static uint GetSectionSize(uint sectionIndex)
+        public static int GetSectionSize(uint sectionIndex)
         {
             foreach (var sectionType in SectionTypes)
             {
@@ -55,9 +55,9 @@ namespace PokemonSaves
     {
         public uint Index;
         public DataSectionTypes Name;
-        public uint Size;
+        public int Size;
 
-        public SectionType(uint index, DataSectionTypes name, uint size)
+        public SectionType(uint index, DataSectionTypes name, int size)
         {
             Index = index;
             Name = name;

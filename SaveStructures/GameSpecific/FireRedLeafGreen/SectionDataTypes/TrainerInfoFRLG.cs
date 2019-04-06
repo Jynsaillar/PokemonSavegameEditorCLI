@@ -15,6 +15,8 @@ namespace PokemonSaves
             SecurityKey = 0x0AF8
         }
 
+        public TrainerInfoFRLG(SaveDataSection saveDataSection) : base(saveDataSection) { }
+
         protected override void ReadPlayerName(BinaryReader binaryReader, long startOffset)
         {
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.PlayerName, SeekOrigin.Begin);
