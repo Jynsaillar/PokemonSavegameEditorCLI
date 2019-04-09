@@ -105,16 +105,16 @@ namespace PokemonSaves
 
         // Write functions:
         // TODO: Implement TeamAndItemsE write functions.
-        protected override void WriteTeamSize() { }
-        protected override void WriteTeamPokemonList() { }
-        protected override void WriteMoney() { }
-        protected override void WriteCoins() { }
-        protected override void WriteItemList() { }
-        protected override void WritePCItems() { }
-        protected override void WriteItemPocket() { }
-        protected override void WriteKeyItemPocket() { }
-        protected override void WriteBallItemPocket() { }
-        protected override void WriteTMCase() { }
-        protected override void WriteBerryPocket() { }
+        protected override void WriteTeamSize(BinaryWriter binaryWriter, long startOffset) { }
+        protected override void WriteTeamPokemonList(BinaryWriter binaryWriter, long startOffset) { }
+        protected override void WriteMoney(BinaryWriter binaryWriter, long startOffset) { }
+        protected override void WriteCoins(BinaryWriter binaryWriter, long startOffset) { }
+        protected override void WriteItemList(BinaryWriter binaryWriter, long startOffset) { }
+        protected override void WritePCItems(BinaryWriter binaryWriter, long startOffset) { }
+        protected override void WriteItemPocket(BinaryWriter binaryWriter, long startOffset) { }
+        protected override void WriteKeyItemPocket(BinaryWriter binaryWriter, long startOffset) { }
+        protected override void WriteBallItemPocket(BinaryWriter binaryWriter, long startOffset) { }
+        protected override void WriteTMCase(BinaryWriter binaryWriter, long startOffset) { }
+        protected override void WriteBerryPocket(BinaryWriter binaryWriter, long startOffset) { }
     }
 }

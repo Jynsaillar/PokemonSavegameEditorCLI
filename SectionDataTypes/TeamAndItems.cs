@@ -89,16 +89,16 @@ namespace PokemonSaves
 
         // Write functions:
         // TODO: Figure out proper arguments for write functions (e.g. offset?).
-        protected abstract void WriteTeamSize();
-        protected abstract void WriteTeamPokemonList();
-        protected abstract void WriteMoney();
-        protected abstract void WriteCoins();
-        protected abstract void WriteItemList();
-        protected abstract void WritePCItems();
-        protected abstract void WriteItemPocket();
-        protected abstract void WriteKeyItemPocket();
-        protected abstract void WriteBallItemPocket();
-        protected abstract void WriteTMCase();
-        protected abstract void WriteBerryPocket();
+        protected abstract void WriteTeamSize(BinaryWriter binaryWriter, long startOffset);
+        protected abstract void WriteTeamPokemonList(BinaryWriter binaryWriter, long startOffset);
+        protected abstract void WriteMoney(BinaryWriter binaryWriter, long startOffset);
+        protected abstract void WriteCoins(BinaryWriter binaryWriter, long startOffset);
+        protected abstract void WriteItemList(BinaryWriter binaryWriter, long startOffset);
+        protected abstract void WritePCItems(BinaryWriter binaryWriter, long startOffset);
+        protected abstract void WriteItemPocket(BinaryWriter binaryWriter, long startOffset);
+        protected abstract void WriteKeyItemPocket(BinaryWriter binaryWriter, long startOffset);
+        protected abstract void WriteBallItemPocket(BinaryWriter binaryWriter, long startOffset);
+        protected abstract void WriteTMCase(BinaryWriter binaryWriter, long startOffset);
+        protected abstract void WriteBerryPocket(BinaryWriter binaryWriter, long startOffset);
     }
 }
