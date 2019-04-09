@@ -19,7 +19,7 @@ namespace PokemonSaves
             BerryPocket = 0x0790
         }
 
-        public TeamAndItemsE(SaveDataSection saveDataSection) : base(saveDataSection){}
+        public TeamAndItemsE(SaveDataSection saveDataSection) : base(saveDataSection) { }
 
         // Read functions:
 
@@ -109,7 +109,7 @@ namespace PokemonSaves
         protected override void WriteTeamPokemonList(BinaryWriter binaryWriter, long startOffset) { }
         protected override void WriteMoney(BinaryWriter binaryWriter, long startOffset) { }
         protected override void WriteCoins(BinaryWriter binaryWriter, long startOffset) { }
-        protected override void WriteItemList(BinaryWriter binaryWriter, long startOffset) { }
+        protected override void WriteItemList(BinaryWriter binaryWriter, long startOffset, List<Item> items) { }
         protected override void WritePCItems(BinaryWriter binaryWriter, long startOffset) { }
         protected override void WriteItemPocket(BinaryWriter binaryWriter, long startOffset) { }
         protected override void WriteKeyItemPocket(BinaryWriter binaryWriter, long startOffset) { }

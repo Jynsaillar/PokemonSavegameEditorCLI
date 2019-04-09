@@ -93,7 +93,7 @@ namespace PokemonSaves
         protected abstract void WriteTeamPokemonList(BinaryWriter binaryWriter, long startOffset);
         protected abstract void WriteMoney(BinaryWriter binaryWriter, long startOffset);
         protected abstract void WriteCoins(BinaryWriter binaryWriter, long startOffset);
-        protected abstract void WriteItemList(BinaryWriter binaryWriter, long startOffset);
+        protected abstract void WriteItemList(BinaryWriter binaryWriter, long startOffset, List<Item> items);
         protected abstract void WritePCItems(BinaryWriter binaryWriter, long startOffset);
         protected abstract void WriteItemPocket(BinaryWriter binaryWriter, long startOffset);
         protected abstract void WriteKeyItemPocket(BinaryWriter binaryWriter, long startOffset);
