@@ -192,5 +192,130 @@ namespace PokemonSaves
             ReadSpecialAttack(binaryReader, StartOffset, gameID); // SpecialAttack
             ReadSpecialDefense(binaryReader, StartOffset, gameID); // SpecialDefense
         }
+
+        // Write functions:
+
+        protected void WritePersonalityValue(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.PersonalityValue, SeekOrigin.Begin);
+            binaryWriter.Write(PersonalityValue);
+        }
+        protected void WriteOTID(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.OTID, SeekOrigin.Begin);
+            binaryWriter.Write(OTID);
+        }
+        protected void WriteNickname(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Nickname, SeekOrigin.Begin);
+            binaryWriter.Write(Nickname);
+        }
+        protected void WriteLanguage(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Language, SeekOrigin.Begin);
+            binaryWriter.Write(Language);
+        }
+        protected void WriteOTName(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.OTName, SeekOrigin.Begin);
+            binaryWriter.Write(OTName);
+        }
+        protected void WriteMarkings(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Markings, SeekOrigin.Begin);
+            binaryWriter.Write(Markings);
+        }
+        protected void WriteChecksum(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Checksum, SeekOrigin.Begin);
+            binaryWriter.Write(Checksum);
+        }
+        protected void WriteUnknownValue(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.UnknownValue, SeekOrigin.Begin);
+            binaryWriter.Write(UnknownValue);
+        }
+        protected void WritePokemonData(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.PokemonData, SeekOrigin.Begin);
+            if (null != PokemonData)
+            {
+                PokemonData.WriteToBinary(binaryWriter, startOffset);
+            }
+        }
+        protected void WriteStatusCondition(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.StatusCondition, SeekOrigin.Begin);
+            binaryWriter.Write(StatusCondition);
+        }
+
+        protected void WriteLevel(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Level, SeekOrigin.Begin);
+            binaryWriter.Write(Level);
+        }
+        protected void WritePokerusRemaining(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.PokerusRemaining, SeekOrigin.Begin);
+            binaryWriter.Write(PokerusRemaining);
+        }
+        protected void WriteCurrentHP(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.CurrentHP, SeekOrigin.Begin);
+            binaryWriter.Write(CurrentHP);
+        }
+        protected void WriteTotalHP(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.TotalHP, SeekOrigin.Begin);
+            binaryWriter.Write(TotalHP);
+        }
+        protected void WriteAttack(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Attack, SeekOrigin.Begin);
+            binaryWriter.Write(Attack);
+        }
+        protected void WriteDefense(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Defense, SeekOrigin.Begin);
+            binaryWriter.Write(Defense);
+        }
+        protected void WriteSpeed(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Speed, SeekOrigin.Begin);
+            binaryWriter.Write(Speed);
+        }
+        protected void WriteSpecialAttack(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.SpecialAttack, SeekOrigin.Begin);
+            binaryWriter.Write(SpecialAttack);
+        }
+        protected void WriteSpecialDefense(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.SpecialDefense, SeekOrigin.Begin);
+            binaryWriter.Write(SpecialDefense);
+        }
+
+        public void WriteToBinary(BinaryWriter binaryWriter)
+        {
+            binaryWriter.BaseStream.Seek(StartOffset, SeekOrigin.Begin);
+            WritePersonalityValue(binaryWriter, StartOffset); // PersonalityValue
+            WriteOTID(binaryWriter, StartOffset); // OTID
+            WriteNickname(binaryWriter, StartOffset); // Nickname
+            WriteLanguage(binaryWriter, StartOffset); // Language
+            WriteOTName(binaryWriter, StartOffset); // OTName
+            WriteMarkings(binaryWriter, StartOffset); // Markings
+            WriteUnknownValue(binaryWriter, StartOffset); // UnknownValue
+            WritePokemonData(binaryWriter, StartOffset); // PokemonData
+            WriteStatusCondition(binaryWriter, StartOffset); // StatusCondition
+            WriteLevel(binaryWriter, StartOffset); // Level
+            WritePokerusRemaining(binaryWriter, StartOffset); // PokerusRemaining
+            WriteCurrentHP(binaryWriter, StartOffset); // CurrentHP
+            WriteTotalHP(binaryWriter, StartOffset); // TotalHP
+            WriteAttack(binaryWriter, StartOffset); // Attack
+            WriteDefense(binaryWriter, StartOffset); // Defense
+            WriteSpeed(binaryWriter, StartOffset); // Speed
+            WriteSpecialAttack(binaryWriter, StartOffset); // SpecialAttack
+            WriteSpecialDefense(binaryWriter, StartOffset); // SpecialDefense
+        }
     }
 }
