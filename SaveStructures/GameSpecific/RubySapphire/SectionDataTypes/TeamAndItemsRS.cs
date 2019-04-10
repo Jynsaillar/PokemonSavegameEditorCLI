@@ -104,16 +104,66 @@ namespace PokemonSaves
 
         // Write functions:
         // TODO: Implement TeamAndItemsRS write functions.
-        protected override void WriteTeamSize(BinaryWriter binaryWriter, long startOffset) { }
-        protected override void WriteTeamPokemonList(BinaryWriter binaryWriter, long startOffset) { }
-        protected override void WriteMoney(BinaryWriter binaryWriter, long startOffset) { }
-        protected override void WriteCoins(BinaryWriter binaryWriter, long startOffset) { }
-        protected override void WriteItemList(BinaryWriter binaryWriter, long startOffset, List<Item> items) { }
-        protected override void WritePCItems(BinaryWriter binaryWriter, long startOffset) { }
-        protected override void WriteItemPocket(BinaryWriter binaryWriter, long startOffset) { }
-        protected override void WriteKeyItemPocket(BinaryWriter binaryWriter, long startOffset) { }
-        protected override void WriteBallItemPocket(BinaryWriter binaryWriter, long startOffset) { }
-        protected override void WriteTMCase(BinaryWriter binaryWriter, long startOffset) { }
-        protected override void WriteBerryPocket(BinaryWriter binaryWriter, long startOffset) { }
+        protected override void WriteTeamSize(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            binaryWriter.Write(TeamSize);
+        }
+        protected override void WriteTeamPokemonList(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            foreach (var pokemon in TeamPokemonList)
+            {
+                pokemon.WriteToBinary(binaryWriter, startOffset);
+            }
+        }
+        protected override void WriteMoney(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            binaryWriter.Write(Money);
+        }
+        protected override void WriteCoins(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            binaryWriter.Write(Coins);
+        }
+        protected override void WriteItemList(BinaryWriter binaryWriter, long startOffset, List<Item> items)
+        {
+            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            foreach (var item in items)
+            {
+                item.WriteToBinary(binaryWriter, startOffset);
+            }
+        }
+        protected override void WritePCItems(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            WriteItemList(binaryWriter, startOffset, PCItems);
+        }
+        protected override void WriteItemPocket(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            WriteItemList(binaryWriter, startOffset, ItemPocket);
+        }
+        protected override void WriteKeyItemPocket(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            WriteItemList(binaryWriter, startOffset, KeyItemPocket);
+        }
+        protected override void WriteBallItemPocket(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            WriteItemList(binaryWriter, startOffset, BallItemPocket);
+        }
+        protected override void WriteTMCase(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            WriteItemList(binaryWriter, startOffset, TMCase);
+        }
+        protected override void WriteBerryPocket(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            WriteItemList(binaryWriter, startOffset, BerryPocket);
+        }
     }
 }
