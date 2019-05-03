@@ -58,6 +58,19 @@ namespace PokemonSaves
             ReadGameSaveA(binaryReader, StartOffset, gameID);// GameSave A
             ReadGameSaveB(binaryReader, StartOffset, gameID);//GameSave B
         }
+
+        // Write functions:
+
+        public void WriteAllSavesToBinary(BinaryWriter binaryWriter, GameIDs gameID)
+        {
+            GameSaveA.WriteToBinary(binaryWriter, gameID);
+            GameSaveB.WriteToBinary(binaryWriter, gameID);
+        }
+
+        public void WriteActiveSaveToBinary(BinaryWriter binaryWriter, GameIDs gameID)
+        {
+            GetActiveSave().WriteToBinary(binaryWriter, gameID);
+        }
     }
 
     interface ISaveFile
