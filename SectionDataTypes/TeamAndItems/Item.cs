@@ -30,5 +30,25 @@ namespace PokemonSaves
             StartOffset = binaryReader.BaseStream.Position;
             ReadItemIndexAndQuantity(binaryReader, StartOffset, gameID); // ItemIndex and ItemQuantity
         }
+
+        // Write functions:
+
+        protected void WriteItemIndex(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.ItemIndex, SeekOrigin.Begin);
+            binaryWriter.Write(ItemIndex);
+        }
+
+        protected void WriteItemQuantity(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.ItemQuantity, SeekOrigin.Begin);
+            binaryWriter.Write(ItemQuantity);
+        }
+
+        public void WriteToBinary(BinaryWriter binaryWriter)
+        {
+            WriteItemIndex(binaryWriter, StartOffset); // ItemIndex
+            WriteItemQuantity(binaryWriter, StartOffset); // ItemQuantity
+        }
     }
 }

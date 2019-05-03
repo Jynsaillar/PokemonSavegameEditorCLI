@@ -44,5 +44,15 @@ namespace PokemonSaves
             PP3 = pp3;
             PP4 = pp4;
         }
+
+        public uint[] Encrypt(uint encryptionKey)
+        {
+            var encryptedSubstructure = new uint[3];
+            encryptedSubstructure[0] = (uint)(Move1 << 0 | Move2 << 16) ^ encryptionKey;
+            encryptedSubstructure[1] = (uint)(Move3 << 0 | Move4 << 16) ^ encryptionKey;
+            encryptedSubstructure[2] = (uint)(PP1 << 0 | PP2 << 8 | PP3 << 16 | PP4 << 24) ^ encryptionKey;
+
+            return encryptedSubstructure;
+        }
     }
 }

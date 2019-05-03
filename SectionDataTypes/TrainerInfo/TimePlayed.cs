@@ -55,5 +55,39 @@ namespace PokemonSaves
             ReadSeconds(binaryReader, StartOffset, gameID);// Seconds
             ReadFrames(binaryReader, StartOffset, gameID);// Frames
         }
+
+        // Write functions:
+
+        protected void WriteHours(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Hours, SeekOrigin.Begin);
+            binaryWriter.Write(Hours);
+        }
+
+        protected void WriteMinutes(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Minutes, SeekOrigin.Begin);
+            binaryWriter.Write(Minutes);
+        }
+
+        protected void WriteSeconds(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Seconds, SeekOrigin.Begin);
+            binaryWriter.Write(Seconds);
+        }
+
+        protected void WriteFrames(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Frames, SeekOrigin.Begin);
+            binaryWriter.Write(Frames);
+        }
+
+        public void WriteToBinary(BinaryWriter binaryWriter)
+        {
+            WriteHours(binaryWriter, StartOffset); // Hours
+            WriteMinutes(binaryWriter, StartOffset); // Minutes
+            WriteSeconds(binaryWriter, StartOffset); // Seconds
+            WriteFrames(binaryWriter, StartOffset); // Frames
+        }
     }
 }

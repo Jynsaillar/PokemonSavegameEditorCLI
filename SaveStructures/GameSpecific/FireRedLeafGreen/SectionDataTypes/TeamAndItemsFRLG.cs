@@ -104,67 +104,65 @@ namespace PokemonSaves
         }
 
         // Write functions:
-        // TODO: Implement TeamAndItemsFRLG write functions.
         protected override void WriteTeamSize(BinaryWriter binaryWriter, long startOffset)
         {
-            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.TeamSize, SeekOrigin.Begin);
             binaryWriter.Write(TeamSize);
         }
         protected override void WriteTeamPokemonList(BinaryWriter binaryWriter, long startOffset)
         {
-            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.TeamPokemonList, SeekOrigin.Begin);
             foreach (var pokemon in TeamPokemonList)
             {
-                pokemon.WriteToBinary(binaryWriter, startOffset);
+                pokemon.WriteToBinary(binaryWriter);
             }
         }
         protected override void WriteMoney(BinaryWriter binaryWriter, long startOffset)
         {
-            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Money, SeekOrigin.Begin);
             binaryWriter.Write(Money);
         }
         protected override void WriteCoins(BinaryWriter binaryWriter, long startOffset)
         {
-            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Coins, SeekOrigin.Begin);
             binaryWriter.Write(Coins);
         }
-        protected override void WriteItemList(BinaryWriter binaryWriter, long startOffset, List<Item> items)
+        protected override void WriteItemList(BinaryWriter binaryWriter, List<Item> items)
         {
-            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
             foreach (var item in items)
             {
-                item.WriteToBinary(binaryWriter, startOffset);
+                item.WriteToBinary(binaryWriter);
             }
         }
         protected override void WritePCItems(BinaryWriter binaryWriter, long startOffset)
         {
-            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
-            WriteItemList(binaryWriter, startOffset, PCItems);
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.PCItems, SeekOrigin.Begin);
+            WriteItemList(binaryWriter, PCItems);
         }
         protected override void WriteItemPocket(BinaryWriter binaryWriter, long startOffset)
         {
-            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
-            WriteItemList(binaryWriter, startOffset, ItemPocket);
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.ItemPocket, SeekOrigin.Begin);
+            WriteItemList(binaryWriter, ItemPocket);
         }
         protected override void WriteKeyItemPocket(BinaryWriter binaryWriter, long startOffset)
         {
-            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
-            WriteItemList(binaryWriter, startOffset, KeyItemPocket);
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.KeyItemPocket, SeekOrigin.Begin);
+            WriteItemList(binaryWriter, KeyItemPocket);
         }
         protected override void WriteBallItemPocket(BinaryWriter binaryWriter, long startOffset)
         {
-            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
-            WriteItemList(binaryWriter, startOffset, BallItemPocket);
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.BallItemPocket, SeekOrigin.Begin);
+            WriteItemList(binaryWriter, BallItemPocket);
         }
         protected override void WriteTMCase(BinaryWriter binaryWriter, long startOffset)
         {
-            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
-            WriteItemList(binaryWriter, startOffset, TMCase);
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.TMCase, SeekOrigin.Begin);
+            WriteItemList(binaryWriter, TMCase);
         }
         protected override void WriteBerryPocket(BinaryWriter binaryWriter, long startOffset)
         {
-            binaryWriter.BaseStream.Seek(startOffset, SeekOrigin.Begin);
-            WriteItemList(binaryWriter, startOffset, BerryPocket);
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.BerryPocket, SeekOrigin.Begin);
+            WriteItemList(binaryWriter, BerryPocket);
         }
     }
 }

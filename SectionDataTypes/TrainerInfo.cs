@@ -72,6 +72,33 @@ namespace PokemonSaves
             ReadSecurityKey(binaryReader, StartOffset, gameID); // SecurityKey
         }
 
+        // Write functions:
+
+        protected abstract void WritePlayerName(BinaryWriter binaryWriter, long startOffset);
+
+        protected abstract void WritePlayerGender(BinaryWriter binaryWriter, long startOffset);
+
+        protected abstract void WriteTrainerId(BinaryWriter binaryWriter);
+
+        protected abstract void WriteTimePlayed(BinaryWriter binaryWriter);
+
+        protected abstract void WriteOptions(BinaryWriter binaryWriter);
+
+        protected abstract void WriteGameCode(BinaryWriter binaryWriter, long startOffset);
+
+        protected abstract void WriteSecurityKey(BinaryWriter binaryWriter, long startOffset);
+
+        public virtual void WriteToBinary(BinaryWriter binaryWriter)
+        {
+            WritePlayerName(binaryWriter, StartOffset); // PlayerName
+            WritePlayerGender(binaryWriter, StartOffset); // PlayerGender
+            WriteTrainerId(binaryWriter); // TrainerId
+            WriteTimePlayed(binaryWriter); // TimePlayed
+            WriteOptions(binaryWriter); // Options
+            WriteGameCode(binaryWriter, StartOffset); // GameCode
+            WriteSecurityKey(binaryWriter, StartOffset); // SecurityKey
+        }
+
     }
 
 }

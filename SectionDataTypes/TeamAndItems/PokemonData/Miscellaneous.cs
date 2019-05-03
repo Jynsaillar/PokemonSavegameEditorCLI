@@ -32,5 +32,15 @@ namespace PokemonSaves
             IVsEggAndAbility = ivsEggAndAbility;
             RibbonsAndObedience = ribbonsAndObedience;
         }
+
+        public uint[] Encrypt(uint encryptionKey)
+        {
+            var encryptedSubstructure = new uint[3];
+            encryptedSubstructure[0] = (uint)(PokerusStatus << 0 | MetLocation << 8 | OriginsInfo << 16) ^ encryptionKey;
+            encryptedSubstructure[1] = IVsEggAndAbility ^ encryptionKey;
+            encryptedSubstructure[2] = RibbonsAndObedience ^ encryptionKey;
+
+            return encryptedSubstructure;
+        }
     }
 }

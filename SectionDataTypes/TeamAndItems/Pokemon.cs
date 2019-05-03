@@ -240,7 +240,7 @@ namespace PokemonSaves
             binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.PokemonData, SeekOrigin.Begin);
             if (null != PokemonData)
             {
-                PokemonData.WriteToBinary(binaryWriter, startOffset);
+                PokemonData.WriteToBinary(binaryWriter);
             }
         }
         protected void WriteStatusCondition(BinaryWriter binaryWriter, long startOffset)
@@ -297,7 +297,6 @@ namespace PokemonSaves
 
         public void WriteToBinary(BinaryWriter binaryWriter)
         {
-            binaryWriter.BaseStream.Seek(StartOffset, SeekOrigin.Begin);
             WritePersonalityValue(binaryWriter, StartOffset); // PersonalityValue
             WriteOTID(binaryWriter, StartOffset); // OTID
             WriteNickname(binaryWriter, StartOffset); // Nickname

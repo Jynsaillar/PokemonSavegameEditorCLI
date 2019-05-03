@@ -36,5 +36,15 @@ namespace PokemonSaves
             Friendship = friendship;
             Unknown = unknown;
         }
+
+        public uint[] Encrypt(uint encryptionKey)
+        {
+            var encryptedSubstructure = new uint[3];
+            encryptedSubstructure[0] = (uint)(Species << 0 | ItemHeld << 16) ^ encryptionKey;
+            encryptedSubstructure[1] = Experience ^ encryptionKey;
+            encryptedSubstructure[2] = (uint)(PPBonuses << 0 | Friendship << 8 | Unknown << 16) ^ encryptionKey;
+
+            return encryptedSubstructure;
+        }
     }
 }

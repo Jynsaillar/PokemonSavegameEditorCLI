@@ -70,5 +70,52 @@ namespace PokemonSaves
             // The SecurityKey is not used in Ruby/Sapphire, thus this method simply remains empty.
         }
 
+        // Write functions:
+        protected override void WritePlayerName(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.PlayerName, SeekOrigin.Begin);
+            binaryWriter.Write(PlayerName);
+        }
+
+        protected override void WritePlayerGender(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.PlayerGender, SeekOrigin.Begin);
+            binaryWriter.Write(PlayerGender);
+        }
+
+        protected override void WriteTrainerId(BinaryWriter binaryWriter)
+        {
+            if (null != TrainerID)
+            {
+                TrainerID.WriteToBinary(binaryWriter);
+            }
+        }
+
+        protected override void WriteTimePlayed(BinaryWriter binaryWriter)
+        {
+            if (null != TimePlayed)
+            {
+                TimePlayed.WriteToBinary(binaryWriter);
+            }
+        }
+
+        protected override void WriteOptions(BinaryWriter binaryWriter)
+        {
+            if (null != Options)
+            {
+                Options.WriteToBinary(binaryWriter);
+            }
+        }
+
+        protected override void WriteGameCode(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.GameCode, SeekOrigin.Begin);
+            binaryWriter.Write(GameCode);
+        }
+
+        protected override void WriteSecurityKey(BinaryWriter binaryWriter, long startOffset)
+        {
+            // The SecurityKey is not used in Ruby/Sapphire, thus this method simply remains empty.
+        }
     }
 }

@@ -36,5 +36,25 @@ namespace PokemonSaves
             ReadPublicID(binaryReader, StartOffset, gameID); // PublicID
             ReadSecretID(binaryReader, StartOffset, gameID); // SecretID
         }
+
+        // Write functions:
+
+        protected void WritePublicID(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.PublicID, SeekOrigin.Begin);
+            binaryWriter.Write(PublicID);
+        }
+
+        protected void WriteSecretID(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.SecretID, SeekOrigin.Begin);
+            binaryWriter.Write(SecretID);
+        }
+
+        public void WriteToBinary(BinaryWriter binaryWriter)
+        {
+            WritePublicID(binaryWriter, StartOffset); // PublicID
+            WriteSecretID(binaryWriter, StartOffset); // SecretID
+        }
     }
 }

@@ -61,5 +61,15 @@ namespace PokemonSaves
             Toughness = toughness;
             Feel = feel;
         }
+
+        public uint[] Encrypt(uint encryptionKey)
+        {
+            var encryptedSubstructure = new uint[3];
+            encryptedSubstructure[0] = (uint)(HPEV << 0 | AttackEV << 8 | DefenseEV << 16 | SpeedEV << 24) ^ encryptionKey;
+            encryptedSubstructure[1] = (uint)(SpecialAttackEV << 0 | SpecialDefenseEV << 8 | Coolness << 16 | Beauty << 24) ^ encryptionKey;
+            encryptedSubstructure[2] = (uint)(Cuteness << 0 | Toughness << 8 | Smartness << 16 | Feel << 24) ^ encryptionKey;
+
+            return encryptedSubstructure;
+        }
     }
 }

@@ -53,5 +53,34 @@ namespace PokemonSaves
             ReadTextSpeedFrameStyle(binaryReader, StartOffset, gameID);// TextSpeed & FrameStyle
             ReadSoundModeBattleStyleBattleScene(binaryReader, StartOffset, gameID);// SoundMode, BattleStyle & BattleScene
         }
+
+        // Write functions:
+
+        protected void WriteButtonMode(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.ButtonMode, SeekOrigin.Begin);
+            binaryWriter.Write((byte)ButtonMode);
+        }
+
+        protected void WriteTextSpeedFrameStyle(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.TextSpeedFrameStyle, SeekOrigin.Begin);
+            byte textSpeedFrameStyleFlags = OptionsHelper.CombineTextSpeedFrameStyle(TextSpeed, FrameStyle);
+            binaryWriter.Write(textSpeedFrameStyleFlags);
+        }
+
+        protected void WriteSoundModeBattleStyleBattleScene(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.SoundModeBattleStyleBattleScene, SeekOrigin.Begin);
+            var soundModeBattleStyleBattleSceneFlags = OptionsHelper.CombineSoundModeBattleStyleBattleScene(SoundMode, BattleStyle, BattleScene);
+            binaryWriter.Write(soundModeBattleStyleBattleSceneFlags);
+        }
+
+        public void WriteToBinary(BinaryWriter binaryWriter)
+        {
+            WriteButtonMode(binaryWriter, StartOffset); // ButtonMode
+            WriteTextSpeedFrameStyle(binaryWriter, StartOffset); // TextSpeed, FrameStyle
+            WriteSoundModeBattleStyleBattleScene(binaryWriter, StartOffset); // SoundMode, BattleStyle, BattleScene
+        }
     }
 }

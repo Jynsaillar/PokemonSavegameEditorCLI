@@ -88,17 +88,30 @@ namespace PokemonSaves
         }
 
         // Write functions:
-        // TODO: Figure out proper arguments for write functions (e.g. offset?).
         protected abstract void WriteTeamSize(BinaryWriter binaryWriter, long startOffset);
         protected abstract void WriteTeamPokemonList(BinaryWriter binaryWriter, long startOffset);
         protected abstract void WriteMoney(BinaryWriter binaryWriter, long startOffset);
         protected abstract void WriteCoins(BinaryWriter binaryWriter, long startOffset);
-        protected abstract void WriteItemList(BinaryWriter binaryWriter, long startOffset, List<Item> items);
+        protected abstract void WriteItemList(BinaryWriter binaryWriter, List<Item> items);
         protected abstract void WritePCItems(BinaryWriter binaryWriter, long startOffset);
         protected abstract void WriteItemPocket(BinaryWriter binaryWriter, long startOffset);
         protected abstract void WriteKeyItemPocket(BinaryWriter binaryWriter, long startOffset);
         protected abstract void WriteBallItemPocket(BinaryWriter binaryWriter, long startOffset);
         protected abstract void WriteTMCase(BinaryWriter binaryWriter, long startOffset);
         protected abstract void WriteBerryPocket(BinaryWriter binaryWriter, long startOffset);
+
+        public virtual void WriteToBinary(BinaryWriter binaryWriter)
+        {
+            WriteTeamSize(binaryWriter, StartOffset); // TeamSize
+            WriteTeamPokemonList(binaryWriter, StartOffset); // TeamPokemonList
+            WriteMoney(binaryWriter, StartOffset); // Money
+            WriteCoins(binaryWriter, StartOffset); // Coins
+            WritePCItems(binaryWriter, StartOffset); // PCItems
+            WriteItemPocket(binaryWriter, StartOffset); // ItemPocket
+            WriteKeyItemPocket(binaryWriter, StartOffset); // KeyItemPocket
+            WriteBallItemPocket(binaryWriter, StartOffset); // BallItemPocket
+            WriteTMCase(binaryWriter, StartOffset); // TMCase
+            WriteBerryPocket(binaryWriter, StartOffset); // BerryPocket
+        }
     }
 }
