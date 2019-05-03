@@ -60,7 +60,7 @@ namespace PokemonSaves
         public static SoundMode ExtractSoundMode(byte soundModeBattleStyleBattleSceneFlags)
         {
             // SoundMode is defined by the rightmost bit, so we extract only the rightmost bit.
-            return (SoundMode)(soundModeBattleStyleBattleSceneFlags & 0b00000001);
+            return (SoundMode)(soundModeBattleStyleBattleSceneFlags & 0b00001000);
         }
 
         public static BattleStyle ExtractBattleStyle(byte soundModeBattleStyleBattleSceneFlags)
@@ -81,6 +81,14 @@ namespace PokemonSaves
         public static void PrintByteFlagAsBinaryString(byte byteFlag)
         {
             System.Diagnostics.Debug.WriteLine(Convert.ToString(byteFlag, 2).PadLeft(8, '0'));
+        }
+
+        // Conditional attribute flag exists to enable this method in Debug mode specifically.
+        // Debug.WriteLine(...) would only be compiled in Debug mode, but the wrapper method would also be available in Release mode otherwise.
+        [System.Diagnostics.Conditional("DEBUG")]
+        public static void PrintIntFlagAsBinaryString(int intFlag)
+        {
+            System.Diagnostics.Debug.WriteLine(Convert.ToString(intFlag, 2).PadLeft(32, '0'));
         }
     }
     /// <summary>
@@ -147,7 +155,7 @@ namespace PokemonSaves
     public enum SoundMode : byte
     {
         Mono = 0b00000000,
-        Stereo = 0b00000001,
+        Stereo = 0b00001000,
     }
 
     /// <summary>
