@@ -7,12 +7,12 @@ namespace PokemonSaves
         private long _startOffset;
         SectionData _data;
         DataSectionTypes _sectionId;
-        short _checksum;
+        ushort _checksum;
         int _saveIndex;
         public long StartOffset { get => _startOffset; set => _startOffset = value; }
         public SectionData Data { get => _data; set => _data = value; }
         public DataSectionTypes SectionID { get => _sectionId; set => _sectionId = value; }
-        public short Checksum { get => _checksum; set => _checksum = value; }
+        public ushort Checksum { get => _checksum; set => _checksum = value; }
         public int SaveIndex { get => _saveIndex; set => _saveIndex = value; }
 
         public enum Offsets : long
@@ -31,7 +31,7 @@ namespace PokemonSaves
         protected void ReadChecksum(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
             binaryReader.BaseStream.Seek(startOffset + (long)Offsets.Checksum, SeekOrigin.Begin);
-            Checksum = binaryReader.ReadInt16();
+            Checksum = binaryReader.ReadUInt16();
         }
         protected void ReadSaveIndex(BinaryReader binaryReader, long startOffset, GameIDs gameID)
         {
@@ -50,6 +50,7 @@ namespace PokemonSaves
                     switch (gameID)
                     {
                         case GameIDs.FireRedLeafGreen:
+                        case GameIDs.LiquidCrystal:
                             var trainerInfoFRLG = new TrainerInfoFRLG(this);
                             trainerInfoFRLG.ReadFromBinary(binaryReader, gameID);
                             Data = trainerInfoFRLG; // Box TrainerInfo into SectionData type.
@@ -71,6 +72,7 @@ namespace PokemonSaves
                     switch (gameID)
                     {
                         case GameIDs.FireRedLeafGreen:
+                        case GameIDs.LiquidCrystal:
                             var teamAndItemsFRLG = new TeamAndItemsFRLG(this);
                             teamAndItemsFRLG.ReadFromBinary(binaryReader, gameID);
                             Data = teamAndItemsFRLG; // Box TeamAndItems into SectionData type.
@@ -139,11 +141,110 @@ namespace PokemonSaves
             ReadData(binaryReader, StartOffset, gameID); // Data
         }
 
+        // Write functions:
+
+        protected void WriteData(BinaryWriter binaryWriter, long startOffset, GameIDs gameID)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.Data, SeekOrigin.Begin);
+            switch (SectionID)
+            {
+                case DataSectionTypes.TrainerInfo:
+                    switch (Data)
+                    {
+                        case TrainerInfoFRLG trainerInfoFRLG:
+                            trainerInfoFRLG.WriteToBinary(binaryWriter);
+                            break;
+                        case TrainerInfoRS trainerInfoRS:
+                            trainerInfoRS.WriteToBinary(binaryWriter);
+                            break;
+                        case TrainerInfoE trainerInfoE:
+                            trainerInfoE.WriteToBinary(binaryWriter);
+                            break;
+                    }
+                    break;
+                case DataSectionTypes.TeamAndItems:
+                    switch (Data)
+                    {
+                        case TeamAndItemsFRLG teamAndItemsFRLG:
+                            teamAndItemsFRLG.WriteToBinary(binaryWriter);
+                            break;
+                        case TeamAndItemsRS teamAndItemsRS:
+                            teamAndItemsRS.WriteToBinary(binaryWriter);
+                            break;
+                        case TeamAndItemsE teamAndItemsE:
+                            teamAndItemsE.WriteToBinary(binaryWriter);
+                            break;
+                    }
+                    break;
+                    // TODO: Add remaining SaveDataSection.WriteData(...) switch cases.
+            }
+        }
+
+        protected void WriteSectionID(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.SectionID, SeekOrigin.Begin);
+            binaryWriter.Write((short)SectionID);
+        }
+
+        public int FindSectionSizeFromChecksum(BinaryReader binaryReader, GameIDs gameID, int seekRangeInBytes, int checksumToFind)
+        {
+            binaryReader.BaseStream.Seek(StartOffset + (long)Offsets.Data, SeekOrigin.Begin); // Seeks start offset of SectionData.
+
+            int upperSeekLimit = (int)Offsets.SectionID;
+            int lowerSeekLimit = upperSeekLimit - seekRangeInBytes;
+
+            for (int bytesToVerify = lowerSeekLimit; bytesToVerify < upperSeekLimit; bytesToVerify += 4)
+            {
+                binaryReader.BaseStream.Seek(StartOffset + (long)Offsets.Data, SeekOrigin.Begin); // Resets stream read position to start of SectionData.
+                int checksum = 0;
+
+                var dataBlob = binaryReader.ReadBytes(bytesToVerify); // One single read operation vs. (bytesToVerify/4) read operations
+                if (dataBlob.Length <= 0)
+                {
+                    System.Console.WriteLine($"[Checksum Error]\nData section {SectionID} byte size returned 0, are you sure the offset is correct?");
+                    return -1;
+                }
+                if (dataBlob.Length % 4 != 0)
+                {
+                    System.Console.WriteLine($"[Checksum Error]\nData section {SectionID} byte size is not divisible by 4 (integer size), are you sure the offset and the section ID are correct?");
+                    return -1;
+                }
+
+                for (int i = 0; i < bytesToVerify; i += 4)
+                {
+                    checksum += System.BitConverter.ToInt32(dataBlob, i); // Extracts 4 bytes as int from dataBlob and adds it to the checksum.
+                }
+
+                var lowerChecksum = (ushort)(checksum >> 0);
+                var upperChecksum = (ushort)(checksum >> 16);
+
+                var combinedChecksum = (ushort)(lowerChecksum + upperChecksum);
+                if (combinedChecksum == checksumToFind)
+                {
+                    System.Console.WriteLine($"Section size for Checksum {checksumToFind} identified as {bytesToVerify}.");
+                    return bytesToVerify;
+                }
+            }
+
+            System.Console.WriteLine($"Couldn't find section size for Checksum {checksumToFind}.");
+            return -1;
+        }
+
         public void RecalculateChecksum(BinaryReader binaryReader, GameIDs gameID)
         {
             binaryReader.BaseStream.Seek(StartOffset + (long)Offsets.Data, SeekOrigin.Begin); // Seeks start offset of SectionData.
 
-            int bytesToVerify = SectionsHelper.GetSectionSize(SectionID);
+            int bytesToVerify = 0;
+            switch (gameID)
+            {
+                case GameIDs.LiquidCrystal:
+                    bytesToVerify = SectionsHelperLC.GetSectionSize(SectionID);
+                    break;
+                default:
+                    bytesToVerify = SectionsHelper.GetSectionSize(SectionID);
+                    break;
+            }
+
             int checksum = 0;
             var dataBlob = binaryReader.ReadBytes(bytesToVerify); // One single read operation vs. (bytesToVerify/4) read operations
             if (dataBlob.Length <= 0)
@@ -162,16 +263,30 @@ namespace PokemonSaves
                 checksum += System.BitConverter.ToInt32(dataBlob, i); // Extracts 4 bytes as int from dataBlob and adds it to the checksum.
             }
 
-            var lowerChecksum = (short)(checksum >> 0);
-            var upperChecksum = (short)(checksum >> 16);
+            var lowerChecksum = (ushort)(checksum >> 0);
+            var upperChecksum = (ushort)(checksum >> 16);
 
-            Checksum = (short)(lowerChecksum + upperChecksum);
+            Checksum = (ushort)(lowerChecksum + upperChecksum);
         }
 
-        public void WriteChecksum(BinaryWriter binaryWriter)
+        protected void WriteChecksum(BinaryWriter binaryWriter)
         {
             binaryWriter.BaseStream.Seek(StartOffset + (long)Offsets.Checksum, SeekOrigin.Begin);
             binaryWriter.Write(Checksum);
+        }
+
+        protected void WriteSaveIndex(BinaryWriter binaryWriter, long startOffset)
+        {
+            binaryWriter.BaseStream.Seek(startOffset + (long)Offsets.SaveIndex, SeekOrigin.Begin);
+            binaryWriter.Write(SaveIndex);
+        }
+
+        public void WriteToBinary(BinaryWriter binaryWriter, GameIDs gameID)
+        {
+            WriteData(binaryWriter, StartOffset, gameID); // Data
+            WriteSectionID(binaryWriter, StartOffset); // SectionID
+            WriteChecksum(binaryWriter); // Checksum
+            WriteSaveIndex(binaryWriter, StartOffset); // SaveIndex
         }
     }
 
@@ -179,11 +294,10 @@ namespace PokemonSaves
     {
         SectionData Data { get; set; }
         DataSectionTypes SectionID { get; set; }
-        short Checksum { get; set; }
+        ushort Checksum { get; set; }
         int SaveIndex { get; set; }
 
         void RecalculateChecksum(BinaryReader binaryReader, GameIDs gameID);
-        void WriteChecksum(BinaryWriter binaryWriter);
     }
 
 }
