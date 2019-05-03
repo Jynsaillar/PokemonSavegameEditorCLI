@@ -26,6 +26,7 @@ namespace PokemonSaves
     {
         FireRedLeafGreen = 0,
         RubySapphire = 1,
-        Emerald = 2
+        Emerald = 2,
+        LiquidCrystal = 3
     }
 }
