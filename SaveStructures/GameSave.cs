@@ -38,6 +38,7 @@ namespace PokemonSaves
                     switch (gameID)
                     {
                         case GameIDs.FireRedLeafGreen:
+                        case GameIDs.LiquidCrystal:
                             return (TrainerInfoFRLG)saveDataSection.Data;
                         case GameIDs.RubySapphire:
                             return (TrainerInfoRS)saveDataSection.Data;
@@ -58,6 +59,7 @@ namespace PokemonSaves
                     switch (gameID)
                     {
                         case GameIDs.FireRedLeafGreen:
+                        case GameIDs.LiquidCrystal:
                             return (TeamAndItemsFRLG)saveDataSection.Data;
                         case GameIDs.RubySapphire:
                             return (TeamAndItemsRS)saveDataSection.Data;
@@ -72,12 +74,26 @@ namespace PokemonSaves
         public void ReadFromBinary(BinaryReader binaryReader, GameIDs gameID)
         {
             StartOffset = binaryReader.BaseStream.Position;
+            SaveDataSections.Clear();
             // 14 SaveDataSections in total.
             for (int i = 0; i < 14; i++)
             {
                 var saveDataSection = new SaveDataSection();
                 saveDataSection.ReadFromBinary(binaryReader, gameID);
                 SaveDataSections.Add(saveDataSection);
+            }
+        }
+
+        // Write functions:
+
+        public void WriteToBinary(BinaryWriter binaryWriter, GameIDs gameID)
+        {
+            var relativeOffset = 0;
+            foreach (var saveDataSection in SaveDataSections)
+            {
+                binaryWriter.BaseStream.Seek(StartOffset + relativeOffset, SeekOrigin.Begin);
+                saveDataSection.WriteToBinary(binaryWriter, gameID);
+                relativeOffset += 4096;
             }
         }
     }
