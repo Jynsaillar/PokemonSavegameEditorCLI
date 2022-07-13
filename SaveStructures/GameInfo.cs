@@ -15,7 +15,7 @@ namespace PokemonSaves
     interface IGameInfo
     {
         /// <value> Returns the generation of the Pokemon save game,\n
-        // e.g. 3 for Gen III.</value>
+        /// e.g. 3 for Gen III.</value>
         int Generation { get; }
         string GameName { get; }
         GameIDs GameID { get; }
