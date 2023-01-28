@@ -120,7 +120,7 @@ namespace PokemonSavegameEditor
                         var otName = StringHelper.GameStringToReadableString(pokemon.OTName, charset);
                         var nickname = StringHelper.GameStringToReadableString(pokemon.Nickname, charset);
 
-                        // If the species is 000, this slot is either empty or occupied by a Pokemon with specied ID #000 as a result of corrupted save data.
+                        // If the species is 000, this slot is either empty or occupied by a Pokemon with species ID #000 as a result of corrupted save data.
                         if(species == 0)
                         {
                             Console.WriteLine("<None>");
